@@ -1,53 +1,211 @@
 <template>
   <div class="home-page">
-    <!-- Hero Section -->
-    <section class="hero-section">
-      <!-- Logos flotantes de fondo -->
+    <!-- Decoración de Fondo (Doble Esquina) -->
+    <div class="bg-decoration">
+      <!-- Grupo Superior Izquierda (Original) -->
+      <span class="dot dc" style="left:2%;top:5%;animation-duration:15s;animation-delay:0s"></span>
+      <span class="dot rs" style="left:5%;top:10%;animation-duration:18s;animation-delay:-2s"></span>
+      <span class="dot pk" style="left:10%;top:15%;animation-duration:22s;animation-delay:-4s"></span>
+      <span class="dot cr" style="left:15%;top:20%;animation-duration:14s;animation-delay:-6s"></span>
+      <span class="dot rs" style="left:3%;top:25%;animation-duration:20s;animation-delay:-8s"></span>
+      <span class="dot pk" style="left:12%;top:30%;animation-duration:17s;animation-delay:-1s"></span>
+      <span class="dot dc" style="left:20%;top:8%;animation-duration:19s;animation-delay:-3s"></span>
+      <span class="dot cr" style="left:8%;top:35%;animation-duration:16s;animation-delay:-5s"></span>
+      <span class="dot rs" style="left:18%;top:4%;animation-duration:21s;animation-delay:-7s"></span>
+      <span class="dot dc" style="left:25%;top:12%;animation-duration:20s;animation-delay:-9s"></span>
 
+      <!-- Grupo Inferior Derecha (Nuevo - Más pequeño) -->
+      <span class="dot br rs" style="right:2%;bottom:5%;animation-duration:14s;animation-delay:0s"></span>
+      <span class="dot br pk" style="right:6%;bottom:8%;animation-duration:16s;animation-delay:-3s"></span>
+      <span class="dot br dc" style="right:10%;bottom:3%;animation-duration:18s;animation-delay:-1s"></span>
+      <span class="dot br cr" style="right:15%;bottom:12%;animation-duration:15s;animation-delay:-5s"></span>
+      <span class="dot br rs" style="right:4%;bottom:20%;animation-duration:19s;animation-delay:-2s"></span>
+      <span class="dot br pk" style="right:12%;bottom:15%;animation-duration:17s;animation-delay:-7s"></span>
+      <span class="dot br dc" style="right:20%;bottom:10%;animation-duration:20s;animation-delay:-4s"></span>
+    </div>
+    <!-- Primera fila: Hero y Categorías -->
+    <div class="top-row">
+      <!-- Hero Section -->
+      <section id="hero-container" class="hero-section">
+        <div class="hero-content container">
+          <div class="hero-layout">
+            <!-- Logo de Sufi a la izquierda -->
 
-      <div class="hero-content container">
-        <div class="hero-layout">
-          <!-- Logo de Sufi a la izquierda -->
+            <!-- Contenido textual a la derecha -->
+            <div class="hero-text-content">
+              <h1 class="hero-title">
+                Encuentra tu 
+                <span class="animated-api">
+                  API
+                  <span class="api-ghost">API</span>
+                </span> 
+                perfecta con 
+                <span class="animated-brand">
+                  <span class="brand-part-1">API Tinder</span><span class="brand-part-2"> Sufi</span>
+                </span>
+              </h1>
+              <p class="hero-subtitle" style="color: var(--sufi-primary); font-weight: bold;">
+                Su contexto funcional esta relacionado con el negocio de Sufi, con el fin de exponer las capacidades de sus diferentes productos; Movilidad, Consumo, Educación y Seguros.
+              </p>
 
-          <!-- Contenido textual a la derecha -->
-          <div class="hero-text-content">
-            <h1 class="hero-title">Encuentra tu API perfecta con ApinderSufi</h1>
-            <p class="hero-subtitle" style="color: var(--sufi-primary); font-weight: bold;">
-              Su contexto funcional esta relacionado con el negocio de Sufi, con el fin de exponer las capacidades de sus diferentes productos; Movilidad, Consumo, Educación y Seguros.
-            </p>
-            <p class="hero-description">
-              Desde la estrategia productor consumidor de Sufi, se implementan las capacidades que suplen las necesidades estratégicas del negocio, permitiendo a sus consumidores originar y gestionar el producto crediticio. Adicional ofrecer funcionalidades de autogestión y consulta para los aliados.
-            </p>
-            <button @click="navigateToApis" class="cta-button">
-              <span>Comenzar Ahora</span>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
+              <!-- Categories Section -->
+              <section id="categories-container" class="categories-section">
+                <div class="container">
+                  <h2 class="section-title">Explora Nuestras Categorías</h2>
+                  <p class="section-subtitle">Descubre las diferentes categorías de APIs que tenemos disponibles para ti</p>
+                  <div class="carousel-controls mobile-hidden">
+                    <button class="carousel-btn prev-btn" @click="shiftCarousel('right')" title="Mover a la izquierda">&larr;</button>
+                    <button class="carousel-btn next-btn" @click="shiftCarousel('left')" title="Mover a la derecha">&rarr;</button>
+                  </div>
+                  <div class="carousel-container">
+                    <div id="carousel-track" class="carousel-track" :class="{ 'is-paused': manualControlActive }">
+                      <div class="category-card carousel-item consulta" 
+                           :class="{ 'is-clicking': animatingCategory === 'Consulta' }"
+                           @click="navigateToCategory('Consulta')">
+                        <div class="category-card-inner">
+                          <div class="popular-badge">
+                            <span class="p-heart">❤️</span>
+                            <div class="p-flames">
+                              <span class="p-flame">🔥</span>
+                              <span class="p-flame">🔥</span>
+                              <span class="p-flame">🔥</span>
+                            </div>
+                          </div>
+                          <div class="category-icon">🔍</div>
+                          <h3 class="category-title">Consulta</h3>
+                          <p class="category-description">APIs para consultar información de clientes, créditos y transacciones</p>
+                        </div>
+                      </div>
+                      <div class="category-card carousel-item gestion" 
+                           :class="{ 'is-clicking': animatingCategory === 'Gestion' }"
+                           @click="navigateToCategory('Gestion')">
+                        <div class="category-card-inner">
+                          <div class="popular-badge">
+                            <span class="p-heart">❤️</span>
+                            <div class="p-flames">
+                              <span class="p-flame">🔥</span>
+                              <span class="p-flame">🔥</span>
+                              <span class="p-flame">🔥</span>
+                            </div>
+                          </div>
+                          <div class="category-icon">⚙️</div>
+                          <h3 class="category-title">Gestión</h3>
+                          <p class="category-description">APIs para gestionar datos, estudios y procesos crediticios</p>
+                        </div>
+                      </div>
+                      <div class="category-card carousel-item simulacion" 
+                           :class="{ 'is-clicking': animatingCategory === 'Simulacion' }"
+                           @click="navigateToCategory('Simulacion')">
+                        <div class="category-card-inner">
+                          <div class="category-icon">📊</div>
+                          <h3 class="category-title">Simulación</h3>
+                          <p class="category-description">APIs para simular créditos y cotizar seguros</p>
+                        </div>
+                      </div>
+                      <div class="category-card carousel-item desembolso" 
+                           :class="{ 'is-clicking': animatingCategory === 'Desembolso' }"
+                           @click="navigateToCategory('Desembolso')">
+                        <div class="category-card-inner">
+                          <div class="popular-badge">
+                            <span class="p-heart">❤️</span>
+                            <div class="p-flames">
+                              <span class="p-flame">🔥</span>
+                              <span class="p-flame">🔥</span>
+                              <span class="p-flame">🔥</span>
+                            </div>
+                          </div>
+                          <div class="category-icon">💰</div>
+                          <h3 class="category-title">Desembolso</h3>
+                          <p class="category-description">APIs para realizar desembolsos de créditos</p>
+                        </div>
+                      </div>
+                      <div class="category-card carousel-item enrolamiento" 
+                           :class="{ 'is-clicking': animatingCategory === 'Enrolamiento' }"
+                           @click="navigateToCategory('Enrolamiento')">
+                        <div class="category-card-inner">
+                          <div class="category-icon">✅</div>
+                          <h3 class="category-title">Enrolamiento</h3>
+                          <p class="category-description">APIs para enrolamiento y registro de usuarios</p>
+                        </div>
+                      </div>
+                      <div class="category-card carousel-item registrar" 
+                           :class="{ 'is-clicking': animatingCategory === 'Registrar' }"
+                           @click="navigateToCategory('Registrar')">
+                        <div class="category-card-inner">
+                          <div class="category-icon">📝</div>
+                          <h3 class="category-title">Registrar</h3>
+                          <p class="category-description">APIs para registrar y gestionar obligaciones</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+            </div>
+
+            <!-- END OF HERO TEXT CONTENT -->
           </div>
         </div>
-      </div>
-      <div class="hero-decoration"></div>
-    </section>
+        
+        <div class="cta-container">
+          <button id="cta-button" @click="navigateToApis" class="cta-button">
+            <span>Comenzar Ahora</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+      </section>
+    </div>
 
-    <!-- Stats Section -->
-    <section class="stats-section">
-      <div class="container">
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-number">30</div>
-            <div class="stat-label">APIs Disponibles</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">6</div>
-            <div class="stat-label">Categorías</div>
+    <!-- Segunda fila: Horizontal Info Container -->
+    <div class="horizontal-info-container">
+      <!-- Stats Section -->
+      <section id="stats-container" class="stats-section">
+        <div class="container">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number apis-count"></div>
+              <div class="stat-label">APIs Disponibles</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number cats-count"></div>
+              <div class="stat-label">Categorías</div>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Decorative Divider -->
-    <div class="decorative-divider">
+
+
+      <!-- How it Works Section -->
+      <section id="how-it-works-container" class="how-it-works-section">
+        <div class="container">
+          <h2 class="section-title">¿Cómo funciona?</h2>
+          <div class="steps-grid">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h3>Explora</h3>
+              <p>Navega por nuestro catálogo de APIs organizadas por categorías</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h3>Filtra</h3>
+              <p>Usa filtros inteligentes para encontrar la API que necesitas</p>
+            </div>
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h3>Conecta</h3>
+              <p>Realiza match y accede a la documentación completa</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Decorative Divider (Fuera del contenedor horizontal) -->
+    <div id="divider-container" class="decorative-divider">
       <div class="divider-line"></div>
       <div class="divider-icon-container">
         <img src="@/assets/icons/sufi.png" alt="Sufi" class="divider-icon">
@@ -55,81 +213,455 @@
       <div class="divider-line"></div>
     </div>
 
-    <!-- Categories Section -->
-    <section class="categories-section">
+    <!-- Description Section - Full Width at the End -->
+    <section id="description-container" class="description-section">
       <div class="container">
-        <h2 class="section-title">Explora Nuestras Categorías</h2>
-        <p class="section-subtitle">Descubre las diferentes categorías de APIs que tenemos disponibles para ti</p>
-        <div class="categories-grid">
-          <div class="category-card consulta" @click="navigateToCategory('Consulta')">
-            <div class="category-icon">🔍</div>
-            <h3 class="category-title">Consulta</h3>
-            <p class="category-description">APIs para consultar información de clientes, créditos y transacciones</p>
-          </div>
-          <div class="category-card gestion" @click="navigateToCategory('Gestion')">
-            <div class="category-icon">⚙️</div>
-            <h3 class="category-title">Gestión</h3>
-            <p class="category-description">APIs para gestionar datos, estudios y procesos crediticios</p>
-          </div>
-          <div class="category-card simulacion" @click="navigateToCategory('Simulacion')">
-            <div class="category-icon">📊</div>
-            <h3 class="category-title">Simulación</h3>
-            <p class="category-description">APIs para simular créditos y cotizar seguros</p>
-          </div>
-          <div class="category-card desembolso" @click="navigateToCategory('Desembolso')">
-            <div class="category-icon">💰</div>
-            <h3 class="category-title">Desembolso</h3>
-            <p class="category-description">APIs para realizar desembolsos de créditos</p>
-          </div>
-          <div class="category-card enrrolamiento" @click="navigateToCategory('Enrrolamiento')">
-            <div class="category-icon">✅</div>
-            <h3 class="category-title">Enrrolamiento</h3>
-            <p class="category-description">APIs para enrolamiento y registro de usuarios</p>
-          </div>
-          <div class="category-card registrar" @click="navigateToCategory('Registrar')">
-            <div class="category-icon">📝</div>
-            <h3 class="category-title">Registrar</h3>
-            <p class="category-description">APIs para registrar y gestionar obligaciones</p>
-          </div>
-        </div>
+        <p class="hero-description">
+          Desde la estrategia productor consumidor de Sufi, se implementan las capacidades que suplen las necesidades estratégicas del negocio, permitiendo a sus consumidores originar y gestionar el producto crediticio. Adicional ofrecer funcionalidades de autogestión y consulta para los aliados.
+        </p>
       </div>
     </section>
+    <!-- Floating Widget & Chat SUFIA (Rediseñado) -->
+    <div class="sufia-widget-container" :class="{ 'is-open': isChatOpen }">
+      <!-- Collapsed State (Iconic Circular Design) -->
+      <div v-if="!isChatOpen" class="floating-widget-sufia-new" @click="toggleChat">
+        <div class="robot-icon-circle">
+          <svg class="robot-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Sleek Helmet Shape -->
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 14.59 3 16.94 4.65 18.7L6 17.35C4.75 15.9 4 14.04 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 14.04 19.25 15.9 18 17.35L19.35 18.7C21 16.94 22 14.59 22 12C22 6.48 17.52 2 12 2Z" fill="currentColor"/>
+            <!-- Inner Helmet Core -->
+            <path d="M12 5C8.13 5 5 8.13 5 12V15C5 16.66 6.34 18 8 18H16C17.66 18 19 16.66 19 15V12C19 8.13 15.87 5 12 5Z" fill="currentColor" opacity="0.8"/>
+            <!-- Large Digital Visor -->
+            <rect x="6" y="9" width="12" height="4" rx="2" fill="#000"/>
+            <!-- Visor Data Glow -->
+            <path d="M7 11H17" stroke="#dc3545" stroke-width="2" stroke-linecap="round">
+              <animate attributeName="opacity" values="1;0.2;1" dur="0.8s" repeatCount="indefinite" />
+            </path>
+            <!-- Visor Hexagon Accents -->
+            <path d="M9 10L10 11L9 12M15 10L14 11L15 12" stroke="#dc3545" stroke-width="0.5" opacity="0.5"/>
+            <!-- Lower Vent Details -->
+            <path d="M10 16H14M11 17H13" stroke="white" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+        </div>
+        <div class="widget-label-new">Pregúntale a SUFIA</div>
+        <div class="widget-pulse-new"></div>
+      </div>
 
-    <!-- How it Works Section -->
-    <section class="how-it-works-section">
-      <div class="container">
-        <h2 class="section-title">¿Cómo funciona?</h2>
-        <div class="steps-grid">
-          <div class="step-card">
-            <div class="step-number">1</div>
-            <h3>Explora</h3>
-            <p>Navega por nuestro catálogo de APIs organizadas por categorías</p>
+      <!-- Expanded State (Chat) -->
+      <div v-else class="sufia-chat-window">
+        <div class="chat-header">
+          <div class="header-info">
+            <div class="avatar-small">
+              <svg viewBox="0 0 24 24" fill="none" style="width: 80%; height: 80%; color: #dc3545">
+                <path d="M12 2C7.58 2 4 5.58 4 10V14C4 16.21 5.79 18 8 18H16C18.21 18 20 16.21 20 14V10C20 5.58 16.42 2 12 2Z" fill="currentColor"/>
+                <circle cx="9" cy="10" r="1.5" fill="white"/>
+                <circle cx="15" cy="10" r="1.5" fill="white"/>
+              </svg>
+            </div>
+            <div>
+              <h3>SUFIA</h3>
+              <p>Asistente Virtual Sufi</p>
+            </div>
           </div>
-          <div class="step-card">
-            <div class="step-number">2</div>
-            <h3>Filtra</h3>
-            <p>Usa filtros inteligentes para encontrar la API que necesitas</p>
+          <button class="close-chat" @click="toggleChat">&times;</button>
+        </div>
+        
+        <div class="chat-messages" ref="chatContainer">
+          <!-- Mensaje Inicial con Grid -->
+          <div class="message sufi-msg">
+            ¡Hola! Soy SUFIA, tu asistente virtual. ¿En qué puedo ayudarte hoy? ¿Quieres explorar los casos de uso que tengo disponibles para ti? Míralos:
+            <div class="use-cases-grid">
+              <div v-for="uc in useCases" :key="uc.id" class="use-case-card" @click="selectUseCase(uc)">
+                <span class="uc-icon">{{ uc.icon }}</span>
+                <span class="uc-name">Caso {{ uc.id }}: {{ uc.name }}</span>
+              </div>
+            </div>
           </div>
-          <div class="step-card">
-            <div class="step-number">3</div>
-            <h3>Conecta</h3>
-            <p>Realiza match y accede a la documentación completa</p>
+          
+          <div v-for="msg in messages" :key="msg.id" :class="['message', msg.sender + '-msg', { 'thinking': msg.isThinking }]">
+            <template v-if="msg.isThinking">
+              <div class="typing-loader">
+                <span></span><span></span><span></span>
+              </div>
+            </template>
+            <template v-else>
+              {{ msg.text }}
+              
+              <!-- Grid dinámico si el mensaje lo requiere -->
+              <div v-if="msg.showGrid" class="use-cases-grid">
+                <div v-for="uc in useCases" :key="uc.id" class="use-case-card" @click="selectUseCase(uc)">
+                  <span class="uc-icon">{{ uc.icon }}</span>
+                  <span class="uc-name">Caso {{ uc.id }}: {{ uc.name }}</span>
+                </div>
+              </div>
+
+              <div v-if="msg.apis && msg.apis.length" class="api-list">
+                <div 
+                  v-for="api in msg.apis" 
+                  :key="api" 
+                  class="api-item clickable" 
+                  @click="handleApiClick(api)"
+                  title="Hacer match con esta API"
+                >
+                  <span>🚀</span> {{ api }}
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+
+        <div v-if="showExploreMore" class="explore-more-container">
+          <div class="explore-more-bubble" @click="exploreMore">
+            ¿ Explorar más casos ?
+          </div>
+        </div>
+
+        <div class="chat-footer">
+          <input 
+            type="text" 
+            v-model="userInput" 
+            @keyup.enter="sendMessage" 
+            :disabled="isChatFinished"
+            :placeholder="isChatFinished ? 'Chat finalizado...' : 'Escribe tu mensaje...'" 
+            class="chat-input"
+          >
+          <div class="chat-actions">
+            <button v-if="!isChatFinished" class="finish-btn" @click="finishChat">
+              Finalizar
+            </button>
+            <button class="send-btn" @click="sendMessage" :disabled="isChatFinished">
+              <svg viewBox="0 0 24 24" width="20" height="20" style="margin-right: 5px;"><path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              Enviar
+            </button>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 <script>
 export default {
   name: 'HomePage',
+  props: {
+    apis: { type: Array, default: () => [] }
+  },
+  data() {
+    return {
+      animatingCategory: null,
+      manualControlActive: false,
+      resumeTimer: null,
+      targetShift: 0,
+      currentShift: 0,
+      isLerping: false,
+      shiftRAF: null,
+      isChatOpen: false,
+      isChatFinished: false,
+      messages: [],
+      userInput: '',
+      useCases: [
+        { id: 1, name: 'Obligaciones', icon: '📄' },
+        { id: 2, name: 'Audio Sufi', icon: '🎧' },
+        { id: 3, name: 'Efecty', icon: '💰' },
+        { id: 4, name: 'Audio Sufi y Obligaciones', icon: '🎙️' },
+        { id: 5, name: 'Información de Cliente', icon: '👤' },
+        { id: 6, name: 'Simulación', icon: '📊' },
+        { id: 7, name: 'Tu 360', icon: '🌐' },
+        { id: 8, name: 'Consumo', icon: '🛍️' },
+        { id: 9, name: 'Autenticación Liviana', icon: '🔐' },
+        { id: 10, name: 'Botón Recaudo', icon: '🖱️' },
+        { id: 11, name: 'Auto Gestión', icon: '⚙️' },
+        { id: 12, name: 'Comercios Aliados', icon: '🤝' },
+        { id: 13, name: 'Gestionar mi Crédito', icon: '💳' }
+      ],
+      showExploreMore: false
+    }
+  },
+  mounted() {
+    const savedPos = localStorage.getItem('carouselPos');
+    if (savedPos) {
+      this.$nextTick(() => {
+        setTimeout(() => {
+          const cards = this.$el.querySelectorAll('.carousel-item');
+          if (cards.length === 0) return;
+          
+          const duration = 15000;
+          const targetTime = parseFloat(savedPos);
+          
+          // Calculamos cuánto debemos desplazar todas las tarjetas respecto a la primera
+          const firstCardAnims = cards[0].getAnimations();
+          const mainAnim = firstCardAnims.find(a => a.animationName && a.animationName.includes('slide-cover-flow'));
+          
+          if (mainAnim) {
+            const currentTime = mainAnim.currentTime || 0;
+            const delta = targetTime - currentTime;
+            
+            // Aplicamos el mismo delta a todas para mantener el espaciado intacto
+            cards.forEach(card => {
+              const anims = card.getAnimations();
+              anims.forEach(anim => {
+                if (anim.animationName && (anim.animationName.includes('slide-cover-flow') || anim.animationName.includes('active-state'))) {
+                  let newTime = (anim.currentTime || 0) + delta;
+                  anim.currentTime = ((newTime % duration) + duration) % duration;
+                }
+              });
+            });
+          }
+        }, 50);
+      });
+    }
+  },
   methods: {
     navigateToApis() {
       this.$emit('navigate-to-apis');
     },
     navigateToCategory(category) {
-      this.$emit('navigate-to-apis', category);
-    }
+      if (this.animatingCategory) return;
+      this.animatingCategory = category;
+      
+      // Guardar posición actual del carrusel para persistencia
+      const firstCard = this.$el.querySelector('.carousel-item');
+      if (firstCard) {
+        const anims = firstCard.getAnimations();
+        if (anims.length > 0) {
+          localStorage.setItem('carouselPos', anims[0].currentTime);
+        }
+      }
+
+      setTimeout(() => {
+        this.$emit('navigate-to-apis', category);
+        this.animatingCategory = null;
+      }, 500);
+    },
+    async sendMessage() {
+      if (!this.userInput.trim() || this.isChatFinished) return;
+      
+      const userMessageText = this.userInput;
+      const userMessageId = Date.now();
+      
+      // 1. Agregar mensaje del usuario al chat
+      this.messages.push({ 
+        id: userMessageId, 
+        text: userMessageText, 
+        sender: 'user',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      
+      this.userInput = '';
+      this.$nextTick(this.scrollToBottom);
+
+      // 2. Mostrar indicador de carga
+      const thinkingId = Date.now() + 1;
+      this.messages.push({
+        id: thinkingId,
+        text: "...",
+        sender: 'sufia',
+        isThinking: true,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      this.$nextTick(this.scrollToBottom);
+
+      try {
+        // 3. Petición DIRECTA a la IP y Puerto (Sin puentes ni proxies)
+        const apiUrl = `http://54.197.221.28:8091/api/rag/mcp?message=${encodeURIComponent(userMessageText)}`;
+        
+        const response = await fetch(apiUrl, {
+          method: 'GET'
+        });
+
+        this.messages = this.messages.filter(m => m.id !== thinkingId);
+
+        if (!response.ok) throw new Error(`Error en el servicio: ${response.status}`);
+
+        const apiResponse = await response.text(); // Recibimos el texto directamente del servidor
+        
+        this.handleSufiaResponse(apiResponse);
+      } catch (error) {
+        console.error("Error API Sufia:", error);
+        this.messages = this.messages.filter(m => m.id !== thinkingId);
+        this.messages.push({
+          id: Date.now(),
+          text: `⚠️ No pude conectar con SUFIA: ${error.message}. Verifica que el servicio esté activo.`,
+          sender: 'sufia',
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+      }
+      
+      this.$nextTick(this.scrollToBottom);
+    },
+    handleSufiaResponse(apiResponse) {
+      let text = apiResponse;
+      let detectedApis = [];
+      const lines = apiResponse.split('\n').map(l => l.trim()).filter(l => l.length > 3);
+
+      lines.forEach(line => {
+        const cleanLine = line.replace('API:', '').trim();
+        const lowerLine = cleanLine.toLowerCase();
+
+        const isMatch = this.apis.some(a => {
+          const apiName = (a.nombreApi || '').toLowerCase();
+          const prodName = (a.nombreEspanol || '').replace(/_/g, ' ').toLowerCase();
+          const keywords = (a.palabrasClave || '').toLowerCase();
+          return lowerLine.includes(apiName) || 
+                 apiName.includes(lowerLine) ||
+                 (lowerLine.includes(prodName) && lowerLine.includes(apiName.split(' ')[0])) ||
+                 keywords.split(',').some(kw => kw.trim().length > 3 && lowerLine.includes(kw.trim().toLowerCase()));
+        });
+
+        if (isMatch || line.startsWith('API:')) {
+          detectedApis.push(cleanLine);
+        }
+      });
+
+      if (detectedApis.length > 0) {
+        const firstLine = lines[0];
+        const isFirstLineApi = detectedApis.some(api => firstLine.includes(api));
+        text = isFirstLineApi ? "He encontrado las siguientes capacidades para tu requerimiento:" : firstLine;
+      }
+
+      this.messages.push({
+        id: Date.now(),
+        text: text,
+        apis: detectedApis,
+        sender: 'sufia',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      this.$nextTick(this.scrollToBottom);
+
+      if (detectedApis.length > 0) {
+        setTimeout(() => { this.showExploreMore = true; }, 1000);
+      }
+    },
+    exploreMore() {
+      this.showExploreMore = false;
+      this.messages.push({
+        id: Date.now(),
+        text: "Claro! Sigue explorando nuestros casos disponibles...",
+        sender: 'sufia',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      
+      setTimeout(() => {
+        this.messages.push({
+          id: Date.now() + 1,
+          text: "Míralos:",
+          sender: 'sufia',
+          showGrid: true,
+          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        this.$nextTick(this.scrollToBottom);
+      }, 600);
+    },
+    handleApiClick(apiName) {
+      if (this.isChatFinished) return;
+
+      const fullText = apiName;
+      let extracted = "";
+      const dashIndex = fullText.includes('–') ? fullText.indexOf('–') : fullText.indexOf('-');
+      const parenIndex = fullText.indexOf('(');
+
+      if (dashIndex !== -1) {
+        extracted = parenIndex !== -1 && parenIndex > dashIndex 
+          ? fullText.substring(dashIndex + 1, parenIndex) 
+          : fullText.substring(dashIndex + 1);
+      } else {
+        extracted = parenIndex !== -1 ? fullText.substring(0, parenIndex) : fullText;
+      }
+
+      const processedValue = extracted.trim().toLowerCase();
+      let filterName = processedValue;
+
+      // Intentar encontrar el x-ibm-name técnico en el dataset para mayor precisión
+      const matchedApi = this.apis.find(a => {
+        const apiNameDS = (a.nombreApi || '').toLowerCase();
+        return apiNameDS.includes(processedValue) || processedValue.includes(apiNameDS);
+      });
+
+      if (matchedApi && matchedApi.xIbmName) {
+        filterName = matchedApi.xIbmName;
+      }
+
+      this.messages.push({
+        id: Date.now(),
+        text: "Buena elección!! espero hagas match 😉",
+        sender: 'sufia',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      this.$nextTick(this.scrollToBottom);
+
+      setTimeout(() => {
+        this.toggleChat();
+        this.$emit('navigate-to-apis', filterName, true);
+      }, 1500);
+    },
+    finishChat() {
+      this.isChatFinished = true;
+      this.messages.push({
+        id: Date.now(),
+        text: "Fué un gusto ayudarte, ya puedes cerrar este chat pero aquí estaré para tí!",
+        sender: 'sufia',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      });
+      this.$nextTick(this.scrollToBottom);
+    },
+    toggleChat() {
+      this.isChatOpen = !this.isChatOpen;
+      // Si se cierra el chat, resetear el estado de finalizado para la próxima vez
+      if (!this.isChatOpen) {
+        this.isChatFinished = false;
+        this.messages = [];
+      }
+    },
+    selectUseCase(uc) {
+      if (this.isChatFinished) return;
+      this.userInput = `Caso ${uc.id} : ${uc.name}`;
+      this.sendMessage();
+    },
+    scrollToBottom() {
+      const container = this.$refs.chatContainer;
+      if (container) container.scrollTop = container.scrollHeight;
+    },
+    shiftCarousel(direction) {
+      const shiftAmountMs = direction === 'right' ? -2500 : 2500;
+      this.targetShift += shiftAmountMs;
+      this.manualControlActive = true;
+      if (this.resumeTimer) clearTimeout(this.resumeTimer);
+      if (!this.isLerping) {
+        this.isLerping = true;
+        const loop = () => {
+          let diff = this.targetShift - this.currentShift;
+          if (Math.abs(diff) < 1) {
+            this.applyDeltaToAnimations(diff);
+            this.currentShift = this.targetShift;
+            this.isLerping = false;
+            this.resumeTimer = setTimeout(() => {
+              this.manualControlActive = false;
+            }, 4000);
+            return;
+          }
+          const step = diff * 0.08;
+          this.currentShift += step;
+          this.applyDeltaToAnimations(step);
+          this.shiftRAF = requestAnimationFrame(loop);
+        };
+        this.shiftRAF = requestAnimationFrame(loop);
+      }
+    },
+    applyDeltaToAnimations(deltaMs) {
+      const cards = this.$el.querySelectorAll('.carousel-item');
+      const duration = 15000; // Duración total de la animación en ms
+      cards.forEach(card => {
+        const anims = card.getAnimations();
+        anims.forEach(anim => {
+          if (anim.animationName && (anim.animationName.includes('slide-cover-flow') || anim.animationName.includes('active-state'))) {
+            let newTime = (anim.currentTime || 0) + deltaMs;
+            // Asegurar que el tiempo sea siempre positivo y cíclico dentro de la duración
+            newTime = ((newTime % duration) + duration) % duration;
+            anim.currentTime = newTime;
+          }
+        });
+      });
+    },
+
   }
 }
 </script>
@@ -139,6 +671,7 @@ export default {
   min-height: 100vh;
   background: #fff;
   color: #1F1E23;
+  overflow-x: hidden;
 }
 
 .container {
@@ -150,8 +683,8 @@ export default {
 /* Hero Section */
 .hero-section {
   position: relative;
-  background: linear-gradient(135deg, #fef5f6 0%, #ffffff 50%, #fff9f9 100%);
-  padding: 60px 24px 100px;
+  background: transparent;
+  padding: 60px 24px 0 24px;
   overflow: hidden;
 }
 
@@ -245,6 +778,11 @@ export default {
   align-items: center;
   gap: 60px;
   min-height: 500px;
+  flex-wrap: wrap;
+}
+
+#hero-container > .hero-content {
+  width: 100%;
 }
 
 .hero-logo-container {
@@ -304,6 +842,77 @@ export default {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+/* Animación palabra API */
+.animated-api {
+  display: inline-block;
+  position: relative;
+  animation: api-fade-in 6s infinite ease-in-out;
+}
+
+.api-ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: api-ghost-move 6s infinite ease-in-out;
+  color: #1F1E23;
+  font-weight: 900;
+}
+
+@keyframes api-fade-in {
+  0% { opacity: 0; }
+  16.66% { opacity: 1; }
+  100% { opacity: 1; }
+}
+
+@keyframes api-ghost-move {
+  0%, 51% { opacity: 0; transform: translateX(0); font-style: normal; }
+  51.6% { opacity: 1; transform: translateX(0); font-style: italic; }
+  56.6% { opacity: 0; transform: translateX(440px); font-style: italic; }
+  100% { opacity: 0; transform: translateX(440px); }
+}
+
+.animated-brand {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.brand-part-1, .brand-part-2 {
+  display: inline-block;
+  animation-duration: 6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+.brand-part-1 {
+  animation-name: brand-anim-1;
+}
+
+.brand-part-2 {
+  animation-name: brand-anim-2;
+}
+
+@keyframes brand-anim-1 {
+  0%, 16.66% { opacity: 1; transform: translateY(0); }
+  25% { opacity: 0; transform: translateY(20px); }
+  25.1%, 41.66% { opacity: 0; transform: translateY(-20px); }
+  50%, 56.6% { opacity: 1; transform: translateY(0); }
+  59% { opacity: 1; transform: translateY(-15px); } /* Salto rápido por impacto */
+  62% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes brand-anim-2 {
+  0%, 16.66% { opacity: 1; transform: translateY(0); } /* 0s-1s */
+  25% { opacity: 0; transform: translateY(20px); } /* 1.5s: Desvanece abajo */
+  25.1%, 50% { opacity: 0; transform: translateY(-20px); } /* 1.5s-3s: Espera arriba */
+  58.33% { opacity: 1; transform: translateY(0); } /* 3.5s: Sufi entra */
+  62.5% { opacity: 1; transform: translateY(-12px); } /* 3.75s: Salto */
+  66.66%, 100% { opacity: 1; transform: translateY(0); } /* 4s: Aterriza. 4s-6s pausa */
+}
+
 .hero-subtitle {
   font-size: 26px;
   font-weight: 700;
@@ -329,6 +938,47 @@ export default {
   margin-right: auto;
 }
 
+.description-section .hero-description {
+  text-align: center;
+  margin: 0 auto;
+  font-size: 20px;
+  padding: 40px 0;
+  
+  /* Efecto de destello en el texto */
+  background: linear-gradient(
+    135deg,
+    #2c2c2c 0%,
+    #2c2c2c 40%,
+    #b0b0b0 50%,
+    #2c2c2c 60%,
+    #2c2c2c 100%
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: shine-and-jump 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes shine-and-jump {
+  0% {
+    background-position: 0% 0%;
+    transform: translateY(0);
+  }
+  10% {
+    transform: translateY(-2px);
+  }
+  20% {
+    background-position: 100% 100%;
+    transform: translateY(0);
+  }
+  100% {
+    background-position: 100% 100%;
+    transform: translateY(0);
+  }
+}
+
 .cta-button {
   background: var(--sufi-primary);
   color: #fff;
@@ -347,6 +997,16 @@ export default {
   gap: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.cta-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 130px; /* Desplazado hacia abajo para evitar cruces con el carrusel */
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 2;
 }
 
 .cta-button:hover {
@@ -390,7 +1050,7 @@ export default {
   font-size: 48px;
   font-weight: 800;
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
   color: #1F1E23;
   letter-spacing: -0.5px;
 }
@@ -439,7 +1099,6 @@ export default {
 /* Stats Section */
 .stats-section {
   padding: 80px 24px;
-  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
   color: #fff;
 }
 
@@ -461,12 +1120,104 @@ export default {
   margin-bottom: 12px;
   line-height: 1;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  min-height: 72px; /* para evitar que brinque cuando está vacío en render inicial */
+  color: #000;
+}
+
+@property --num-30 {
+  syntax: "<integer>";
+  initial-value: 30;
+  inherits: false;
+}
+
+@property --num-6 {
+  syntax: "<integer>";
+  initial-value: 6;
+  inherits: false;
+}
+
+@keyframes scramble-30 {
+  /* Aparición Emergente (0s - 0.35s) */
+  0% { --num-30: 1; transform: translateY(30px) scale(0); opacity: 0; animation-timing-function: ease-out; }
+  3% { --num-30: 45; transform: translateY(-10px) scale(1.15); opacity: 1; animation-timing-function: ease-in-out; }
+  6% { --num-30: 89; transform: translateY(0) scale(1); opacity: 1; }
+
+  /* Fase Rápida (0.7s - 2s) */
+  12% { --num-30: 12; }
+  16.6% { --num-30: 90; }
+
+  /* Fase de Desaceleración Gradual (2s - 5s) */
+  21% { --num-30: 40; }
+  27% { --num-30: 80; }
+  32% { --num-30: 50; }
+  38% { --num-30: 22; }
+  
+  /* Salto y llegada al número final (5s - 5.5s) */
+  41.6% { --num-30: 30; transform: translateY(0) scale(1); animation-timing-function: ease-out; opacity: 1; }
+  43% { --num-30: 30; transform: translateY(-15px) scale(1.1); animation-timing-function: ease-in; }
+  44% { --num-30: 30; transform: translateY(0) scale(1); animation-timing-function: ease-out; }
+  45% { --num-30: 30; transform: translateY(-5px) scale(1.05); animation-timing-function: ease-in; }
+  46% { --num-30: 30; transform: translateY(0) scale(1); }
+
+  /* Reposo (5.5s - 11.5s) */
+  96% { --num-30: 30; transform: translateY(0) scale(1); opacity: 1; }
+  
+  /* Desaparición para reiniciar ciclo (11.5s - 12s) */
+  100% { --num-30: 30; transform: translateY(20px) scale(0.5); opacity: 0; }
+}
+
+@keyframes scramble-6 {
+  /* Aparición Emergente (0s - 0.35s) */
+  0% { --num-6: 1; transform: translateY(30px) scale(0); opacity: 0; animation-timing-function: ease-out; }
+  3% { --num-6: 9; transform: translateY(-10px) scale(1.15); opacity: 1; animation-timing-function: ease-in-out; }
+  6% { --num-6: 85; transform: translateY(0) scale(1); opacity: 1; }
+
+  /* Fase Rápida (0.7s - 2s) */
+  12% { --num-6: 15; }
+  16.6% { --num-6: 80; }
+
+  /* Fase de Desaceleración Gradual (2s - 5s) */
+  21% { --num-6: 30; }
+  27% { --num-6: 65; }
+  32% { --num-6: 40; }
+  38% { --num-6: 12; }
+  
+  /* Salto y llegada al número final (5s - 5.5s) */
+  41.6% { --num-6: 6; transform: translateY(0) scale(1); animation-timing-function: ease-out; opacity: 1; }
+  43% { --num-6: 6; transform: translateY(-15px) scale(1.1); animation-timing-function: ease-in; }
+  44% { --num-6: 6; transform: translateY(0) scale(1); animation-timing-function: ease-out; }
+  45% { --num-6: 6; transform: translateY(-5px) scale(1.05); animation-timing-function: ease-in; }
+  46% { --num-6: 6; transform: translateY(0) scale(1); }
+
+  /* Reposo (5.5s - 11.5s) */
+  96% { --num-6: 6; transform: translateY(0) scale(1); opacity: 1; }
+  
+  /* Desaparición para reiniciar ciclo (11.5s - 12s) */
+  100% { --num-6: 6; transform: translateY(20px) scale(0.5); opacity: 0; }
+}
+
+.stat-number.apis-count {
+  animation: scramble-30 12s infinite;
+  counter-reset: num var(--num-30);
+  display: inline-block;
+}
+
+.stat-number.cats-count {
+  animation: scramble-6 12s infinite;
+  counter-reset: num var(--num-6);
+  display: inline-block;
+}
+
+.stat-number.apis-count::after,
+.stat-number.cats-count::after {
+  content: counter(num);
 }
 
 .stat-label {
   font-size: 22px;
   opacity: 0.95;
   font-weight: 600;
+  color: #000;
 }
 
 /* Decorative Divider */
@@ -477,6 +1228,7 @@ export default {
   padding: 60px 24px;
   background: #fff;
   position: relative;
+  margin-top: 30px
 }
 
 .divider-line {
@@ -558,8 +1310,14 @@ export default {
 
 /* Categories Section */
 .categories-section {
-  padding: 80px 24px;
+  padding: 0px 24px;
   background: #fff;
+}
+
+#hero-container .categories-section {
+  padding: 5px 0 0 0;
+  background: transparent;
+  margin-top: -15px;
 }
 
 .section-subtitle {
@@ -572,12 +1330,244 @@ export default {
   margin-right: auto;
 }
 
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 32px;
+/* Carousel Controls */
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 20;
+}
+
+.carousel-btn {
+  background: var(--sufi-primary, #dc3545);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+  transition: all 0.3s ease;
+}
+
+.carousel-btn:hover:not(:disabled) {
+  transform: scale(1.1);
+  background: #c82333;
+}
+
+.carousel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.carousel-container {
+  position: relative;
+  height: 390px;
+  overflow: visible;
   max-width: 1200px;
   margin: 0 auto;
+  padding-top: 45px;
+  z-index: 10;
+}
+
+.carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-track.is-paused .carousel-item {
+  animation-play-state: paused !important;
+}
+
+.carousel-track .carousel-item {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 320px;
+  margin-left: -160px;
+  opacity: 0;
+  will-change: transform, opacity, current-time; /* Optimización de rendimiento */
+  animation: slide-cover-flow 15s infinite, active-state 15s infinite;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+}
+
+.carousel-track:hover .carousel-item {
+  animation-play-state: paused;
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
+}
+
+@property --active-opacity {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --sparkle-opacity {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.carousel-track .carousel-item::after {
+  content: '';
+  position: absolute;
+  top: -3px; left: -3px; right: -3px; bottom: -3px;
+  border-radius: 23px;
+  padding: 3px;
+  background: conic-gradient(from var(--border-angle, 0turn), transparent 0%, transparent 80%, #dc3545 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 10;
+  opacity: var(--active-opacity, 0);
+  animation: border-spin 3s linear infinite;
+  transition: opacity 0.3s ease;
+}
+
+.carousel-track .carousel-item:hover::after {
+  animation-duration: 1.2s;
+}
+
+.carousel-track .carousel-item:nth-child(1), .carousel-track .carousel-item:nth-child(1)::after, .carousel-track .carousel-item:nth-child(1) .category-icon::before, .carousel-track .carousel-item:nth-child(1) .category-icon::after, .carousel-track .carousel-item:nth-child(1) .category-title::before, .carousel-track .carousel-item:nth-child(1) .category-title::after { animation-delay: 0s; }
+.carousel-track .carousel-item:nth-child(2), .carousel-track .carousel-item:nth-child(2)::after, .carousel-track .carousel-item:nth-child(2) .category-icon::before, .carousel-track .carousel-item:nth-child(2) .category-icon::after, .carousel-track .carousel-item:nth-child(2) .category-title::before, .carousel-track .carousel-item:nth-child(2) .category-title::after { animation-delay: -2.5s; }
+.carousel-track .carousel-item:nth-child(3), .carousel-track .carousel-item:nth-child(3)::after, .carousel-track .carousel-item:nth-child(3) .category-icon::before, .carousel-track .carousel-item:nth-child(3) .category-icon::after, .carousel-track .carousel-item:nth-child(3) .category-title::before, .carousel-track .carousel-item:nth-child(3) .category-title::after { animation-delay: -5s; }
+.carousel-track .carousel-item:nth-child(4), .carousel-track .carousel-item:nth-child(4)::after, .carousel-track .carousel-item:nth-child(4) .category-icon::before, .carousel-track .carousel-item:nth-child(4) .category-icon::after, .carousel-track .carousel-item:nth-child(4) .category-title::before, .carousel-track .carousel-item:nth-child(4) .category-title::after { animation-delay: -7.5s; }
+.carousel-track .carousel-item:nth-child(5), .carousel-track .carousel-item:nth-child(5)::after, .carousel-track .carousel-item:nth-child(5) .category-icon::before, .carousel-track .carousel-item:nth-child(5) .category-icon::after, .carousel-track .carousel-item:nth-child(5) .category-title::before, .carousel-track .carousel-item:nth-child(5) .category-title::after { animation-delay: -10s; }
+.carousel-track .carousel-item:nth-child(6), .carousel-track .carousel-item:nth-child(6)::after, .carousel-track .carousel-item:nth-child(6) .category-icon::before, .carousel-track .carousel-item:nth-child(6) .category-icon::after, .carousel-track .carousel-item:nth-child(6) .category-title::before, .carousel-track .carousel-item:nth-child(6) .category-title::after { animation-delay: -12.5s; }
+
+.carousel-track .carousel-item .category-icon::before, 
+.carousel-track .carousel-item .category-icon::after,
+.carousel-track .carousel-item .category-title::before,
+.carousel-track .carousel-item .category-title::after {
+  content: '❤';
+  position: absolute;
+  color: #dc3545;
+  opacity: calc(var(--active-opacity) * var(--sparkle-opacity));
+  pointer-events: none;
+  z-index: 0;
+  line-height: 1;
+  transition: opacity 0.3s ease;
+  text-shadow: none;
+}
+
+.carousel-track .carousel-item .category-icon::before {
+  left: 15%;
+  top: 30%;
+  font-size: 48px;
+  animation: heart-fly-left-1 2.5s infinite;
+}
+
+.carousel-track .carousel-item .category-icon::after {
+  right: 15%;
+  top: 35%;
+  font-size: 36px;
+  animation: heart-fly-right-1 2.5s infinite;
+}
+
+.carousel-track .carousel-item .category-title::before {
+  left: 20%;
+  top: 60%;
+  font-size: 58px;
+  animation: heart-fly-left-2 2.5s infinite;
+}
+
+.carousel-track .carousel-item .category-title::after {
+  right: 20%;
+  top: 65%;
+  font-size: 40px;
+  animation: heart-fly-right-2 2.5s infinite;
+}
+
+@keyframes slide-cover-flow {
+  /* Arrives at Center */
+  0% { left: 50%; transform: scale(1.05); opacity: 1; z-index: 2; visibility: visible; }
+  
+  /* Shake and enlarge in Center */
+  2% { left: 50%; transform: scale(1.15) rotate(0deg); opacity: 1; z-index: 2; visibility: visible; }
+  3% { left: 50%; transform: scale(1.15) rotate(-3deg); opacity: 1; z-index: 2; visibility: visible; }
+  4% { left: 50%; transform: scale(1.15) rotate(3deg); opacity: 1; z-index: 2; visibility: visible; }
+  5% { left: 50%; transform: scale(1.15) rotate(-3deg); opacity: 1; z-index: 2; visibility: visible; }
+  6% { left: 50%; transform: scale(1.15) rotate(0deg); opacity: 1; z-index: 2; visibility: visible; }
+  
+  /* Stay in Center */
+  14% { left: 50%; transform: scale(1.15) rotate(0deg); opacity: 1; z-index: 2; visibility: visible; }
+  
+  /* Transition to Left */
+  16.67% { left: 15%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; }
+  
+  /* Stay in Left */
+  31% { left: 15%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; }
+  
+  /* Transition to Far Left (Hidden) */
+  33.33% { left: -30%; transform: scale(0.5); opacity: 0; z-index: 0; visibility: hidden; }
+  
+  /* Jump to Far Right (Hidden) */
+  34% { left: 130%; transform: scale(0.5); opacity: 0; z-index: 0; visibility: hidden; }
+  
+  /* Stay Hidden Far Right */
+  81% { left: 130%; transform: scale(0.5); opacity: 0; z-index: 0; visibility: hidden; }
+  
+  /* Transition to Right */
+  83.33% { left: 85%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; }
+  
+  /* Stay in Right */
+  98% { left: 85%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; }
+  
+  /* Transition to Center */
+  100% { left: 50%; transform: scale(1.05); opacity: 1; z-index: 2; visibility: visible; }
+}
+
+@keyframes active-state {
+  0%, 16.67%, 100% { --active-opacity: 0; }
+  1% { --active-opacity: 0; }
+  2%, 14% { --active-opacity: 1; }
+  15% { --active-opacity: 0; }
+}
+
+@keyframes border-spin {
+  to { --border-angle: 1turn; }
+}
+
+@keyframes heart-fly-left-1 {
+  0%, 10% { --sparkle-opacity: 0; transform: translate(0, 0) scale(0) rotate(-10deg); }
+  20% { --sparkle-opacity: 1; transform: translate(-30px, -30px) scale(1) rotate(-15deg); }
+  60% { --sparkle-opacity: 0; transform: translate(-140px, -110px) scale(2.0) rotate(-25deg); }
+  100% { --sparkle-opacity: 0; transform: translate(-140px, -110px) scale(2.0) rotate(-25deg); }
+}
+
+@keyframes heart-fly-right-1 {
+  0%, 25% { --sparkle-opacity: 0; transform: translate(0, 0) scale(0) rotate(10deg); }
+  35% { --sparkle-opacity: 1; transform: translate(30px, -40px) scale(1) rotate(20deg); }
+  75% { --sparkle-opacity: 0; transform: translate(120px, -140px) scale(1.9) rotate(30deg); }
+  100% { --sparkle-opacity: 0; transform: translate(120px, -140px) scale(1.9) rotate(30deg); }
+}
+
+@keyframes heart-fly-left-2 {
+  0%, 40% { --sparkle-opacity: 0; transform: translate(0, 0) scale(0) rotate(-20deg); }
+  50% { --sparkle-opacity: 1; transform: translate(-25px, 30px) scale(1) rotate(-30deg); }
+  90% { --sparkle-opacity: 0; transform: translate(-110px, 130px) scale(2.2) rotate(-40deg); }
+  100% { --sparkle-opacity: 0; transform: translate(-110px, 130px) scale(2.2) rotate(-40deg); }
+}
+
+@keyframes heart-fly-right-2 {
+  0%, 55% { --sparkle-opacity: 0; transform: translate(0, 0) scale(0) rotate(15deg); }
+  65% { --sparkle-opacity: 1; transform: translate(35px, 25px) scale(1) rotate(25deg); }
+  95% { --sparkle-opacity: 0; transform: translate(140px, 90px) scale(2.3) rotate(45deg); }
+  100% { --sparkle-opacity: 0; transform: translate(140px, 90px) scale(2.3) rotate(45deg); }
 }
 
 .category-card {
@@ -586,40 +1576,33 @@ export default {
   border-radius: 20px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   transition: all 0.4s ease;
-  text-align: center;
-  border: 3px solid transparent;
-  cursor: pointer;
+}
+
+.category-card-inner {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 1s cubic-bezier(0.2, 1, 0.2, 1), box-shadow 1s ease, background 1s ease;
   position: relative;
-  overflow: hidden;
 }
 
-.category-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 6px;
-  background: linear-gradient(90deg, var(--category-color) 0%, var(--category-color-dark) 100%);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s ease;
-}
-
-.category-card:hover::before {
-  transform: scaleX(1);
-}
-
-.category-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  border-color: var(--category-color);
+.category-card:hover .category-card-inner {
+  transform: scale(1.15); /* Ahora el escalado sí será visible y fluido */
+  box-shadow: 0 25px 60px rgba(220, 53, 69, 0.2);
+  background: #fffafa;
+  z-index: 100;
 }
 
 .category-icon {
   font-size: 64px;
   margin-bottom: 20px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease;
 }
 
 .category-card:hover .category-icon {
@@ -704,6 +1687,13 @@ export default {
 .how-it-works-section {
   padding: 80px 24px;
   background: #fff;
+}
+
+/* Description Section - Full Width */
+.description-section {
+  padding: 0px 24px;
+  background: linear-gradient(135deg, #fef5f6 0%, #ffffff 50%, #fff9f9 100%);
+  width: 100%;
 }
 
 .steps-grid {
@@ -829,9 +1819,114 @@ export default {
   }
 }
 
+/* Layout Rows */
+.top-row {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: stretch;
+  margin-bottom: 0;
+}
+
+.top-row > #hero-container {
+  flex: 1;
+}
+
+.horizontal-info-container {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  height: 100px;
+  container-type: size;
+  container-name: info;
+  margin-top: 20px
+}
+
+.horizontal-info-container > .stats-section {
+  flex: 0 0 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5cqh 2cqw;
+}
+
+.horizontal-info-container > .how-it-works-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5cqh 2cqw;
+}
+
+.horizontal-info-container .stats-grid {
+  gap: 2cqw;
+}
+
+.horizontal-info-container .stats-grid .stat-card {
+  position: relative;
+}
+
+.horizontal-info-container .stats-grid .stat-card:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  right: -1cqw;
+  width: 2px;
+  height: 80%;
+  background-color: #000;
+  transform: translateX(50%);
+}
+
+.horizontal-info-container .stat-number {
+  font-size: 40cqh;
+  min-height: 40cqh;
+  margin-bottom: 2cqh;
+}
+
+.horizontal-info-container .stat-label {
+  font-size: 15cqh;
+}
+
+
+.horizontal-info-container .section-title {
+  font-size: 30cqh;
+  margin-bottom: 2.4cqh;
+}
+
+.horizontal-info-container .steps-grid {
+  gap: 1.2cqw;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.horizontal-info-container .step-card {
+  padding: 2.4cqh 1.2cqw;
+}
+
+.horizontal-info-container .step-number {
+  width: 24cqh;
+  height: 24cqh;
+  font-size: 12cqh;
+  margin: 0 auto 2.4cqh;
+}
+
+.horizontal-info-container .step-card h3 {
+  font-size: 16.8cqh;
+  margin-bottom: 1.2cqh;
+}
+
+.horizontal-info-container .step-card p {
+  font-size: 10.8cqh;
+}
+
 /* Responsive Design */
 /* Tablets y pantallas medianas */
 @media (max-width: 1024px) {
+  .top-row,
+  .horizontal-info-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+
   .hero-layout {
     gap: 40px;
   }
@@ -850,16 +1945,15 @@ export default {
     gap: 32px;
   }
 
-  .categories-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 28px;
+  .carousel-container {
+    height: 280px;
   }
 }
 
 /* Tablets pequeños */
 @media (max-width: 768px) {
   .hero-section {
-    padding: 50px 20px 80px;
+    padding: 50px 20px;
   }
 
   .hero-layout {
@@ -895,8 +1989,15 @@ export default {
 
   .cta-button {
     width: 100%;
-    max-width: 400px;
+    max-width: 100%;
+    padding: 18px 30px;
+    font-size: 18px;
     justify-content: center;
+  }
+  
+  .cta-container {
+    margin-top: 50px;
+    padding: 0 20px;
   }
 
   .floating-logo {
@@ -929,23 +2030,36 @@ export default {
     height: 100px;
   }
 
-  .section-title {
-    font-size: 32px;
+  .carousel-container {
+    height: 450px;
+    overflow: visible;
+    padding: 20px 0;
   }
 
-  .cta-title {
-    font-size: 32px;
+  .carousel-track {
+    display: flex !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 30px;
+    padding: 20px 40px;
+    width: 100% !important;
+    animation: none !important;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .features-grid,
-  .steps-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
+  .carousel-track::-webkit-scrollbar {
+    display: none;
   }
 
-  .categories-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
+  .carousel-item {
+    flex: 0 0 300px; /* Ancho fijo para móvil */
+    height: 380px !important; /* Altura vital para visibilidad */
+    position: relative !important;
+    opacity: 1 !important;
+    transform: none !important;
+    scroll-snap-align: center;
+    visibility: visible !important;
+    display: block !important;
   }
 
   .category-card {
@@ -1001,27 +2115,70 @@ export default {
 
 /* Móviles */
 @media (max-width: 640px) {
+  .bg-decoration {
+    display: none; /* Limpieza total del fondo para mejorar legibilidad */
+  }
+
   .hero-section {
-    padding: 40px 16px 70px;
+    padding: 60px 16px;
+    text-align: center;
+  }
+
+  .hero-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .categories-section {
+    width: 100vw;
+    margin-left: -16px; /* Para que el carrusel sangre a los bordes */
+  }
+
+  .horizontal-info-container {
+    display: flex;
+    flex-direction: column !important;
+    height: auto !important;
+    container-type: normal !important; /* Evita que las unidades cqh colapsen */
+    gap: 0;
+    padding: 0;
+  }
+
+  .how-it-works-section {
+    display: flex !important;
+    visibility: visible !important;
+    position: relative;
+    width: 100%;
+    padding: 40px 20px !important; /* Padding real en px */
+    margin-bottom: 20px;
+    height: auto !important;
   }
 
   .decorative-divider {
+    position: relative;
+    width: 100%;
     padding: 40px 16px;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .divider-line {
-    max-width: 200px;
-    height: 2px;
-  }
-
-  .divider-icon-container {
-    margin: 0 16px;
-    padding: 12px;
-  }
-
-  .divider-icon {
-    width: 60px;
-    height: 60px;
+  .description-section {
+    position: relative;
+    width: 100%;
+    padding: 40px 20px;
+    margin-top: 20px;
+    text-align: center;
   }
 
   .hero-logo-main {
@@ -1029,15 +2186,18 @@ export default {
   }
 
   .hero-title {
-    font-size: 28px;
+    font-size: 22px; /* Más compacto y legible */
+    line-height: 1.3;
   }
 
   .hero-subtitle {
-    font-size: 15px;
+    font-size: 14px;
+    line-height: 1.5;
   }
 
   .hero-description {
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1.6;
   }
 
   .cta-button {
@@ -1046,24 +2206,29 @@ export default {
   }
 
   .section-title {
-    font-size: 28px;
-    margin-bottom: 40px;
+    font-size: 22px;
+    margin-bottom: 30px;
+  }
+
+  .section-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
   }
 
   .cta-title {
-    font-size: 28px;
+    font-size: 22px;
   }
 
   .cta-description {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .stat-number {
-    font-size: 48px;
+    font-size: 42px;
   }
 
   .stat-label {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .step-number {
@@ -1073,12 +2238,27 @@ export default {
     margin-bottom: 20px;
   }
 
+  .stat-card, .step-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
   .step-card h3 {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .step-card p {
-    font-size: 15px;
+    font-size: 14px;
+    max-width: 280px;
+    margin: 0 auto;
+  }
+
+  .cta-container {
+    margin-top: 60px;
+    margin-bottom: 20px;
   }
 
   .feature-icon {
@@ -1191,6 +2371,704 @@ export default {
   .category-description {
     font-size: 13px;
   }
+}
+
+/* Tinder-style Multiple Fire Animation */
+.fire-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  pointer-events: none;
+}
+
+.fire {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.5);
+  opacity: 0;
+  animation: fire-float-up 1.6s ease-in-out forwards;
+}
+
+.fire-1 { animation-delay: 0s; left: 35%; font-size: 50px; }
+.fire-2 { animation-delay: 0.1s; left: 65%; font-size: 40px; }
+.fire-3 { animation-delay: 0.2s; left: 20%; font-size: 60px; }
+.fire-4 { animation-delay: 0.3s; left: 80%; font-size: 45px; }
+.fire-5 { animation-delay: 0.4s; left: 50%; font-size: 70px; }
+
+@keyframes fire-float-up {
+  0% {
+    transform: translate(-50%, 0) scale(0.5);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -200px) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Floating Widget & Chat SUFIA (Rediseñado) */
+.sufia-widget-container {
+  position: fixed;
+  right: 12%; /* Cerca del centro-derecha */
+  top: 55%;
+  transform: translateY(-50%);
+  z-index: 9999;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.floating-widget-sufia-new {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+
+.robot-icon-circle {
+  width: 125px; /* 50% más pequeña */
+  height: 125px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #dc3545;
+  filter: drop-shadow(0 0 15px rgba(220, 53, 69, 0.6));
+  position: relative;
+  z-index: 2;
+  animation: buzz-loop 1s ease-in-out infinite;
+}
+
+@keyframes buzz-loop {
+  0%, 80%, 100% { transform: translate(0, 0) rotate(0deg); }
+  82% { transform: translate(-6px, -6px) rotate(-4deg); }
+  84% { transform: translate(6px, 6px) rotate(4deg); }
+  86% { transform: translate(-6px, 6px) rotate(-4deg); }
+  88% { transform: translate(6px, -6px) rotate(4deg); }
+  90% { transform: translate(-6px, -6px) rotate(-4deg); }
+  92% { transform: translate(6px, 6px) rotate(4deg); }
+}
+
+/* Background Animation Styles - Digital City (Solo Edificios) */
+.bg-animation-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: #0a0a0c;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-dark-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, transparent 0%, rgba(10, 10, 12, 0.8) 100%);
+  z-index: 1;
+}
+
+.bg-svg {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+/* Animaciones de "Respiración" */
+.building-anim-1 { animation: buildingBreath 4s ease-in-out infinite; }
+.building-anim-2 { animation: buildingBreath 5s ease-in-out infinite -1s; }
+.building-anim-3 { animation: buildingBreath 6s ease-in-out infinite -2s; }
+
+@keyframes buildingBreath {
+  0%, 100% { opacity: 0.4; filter: brightness(1); }
+  50% { opacity: 0.8; filter: brightness(1.5) drop-shadow(0 0 15px currentColor); }
+}
+
+/* Partículas de Datos Ascendentes */
+.particle {
+  opacity: 0;
+  animation: particleRise 3s linear infinite;
+}
+
+@keyframes particleRise {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-500px); opacity: 0; }
+}
+
+.particle-1 { left: 10%; animation-delay: 0s; }
+.particle-2 { left: 15%; animation-delay: 0.5s; }
+.particle-3 { left: 25%; animation-delay: 1.2s; }
+.particle-4 { left: 35%; animation-delay: 0.8s; }
+.particle-5 { left: 45%; animation-delay: 1.5s; }
+.particle-6 { left: 55%; animation-delay: 0.3s; }
+.particle-7 { left: 65%; animation-delay: 2.1s; }
+.particle-8 { left: 75%; animation-delay: 1.1s; }
+.particle-9 { left: 85%; animation-delay: 0.6s; }
+.particle-10 { left: 95%; animation-delay: 1.9s; }
+
+/* Background Decoration: Doble Gradiente Sutil y Equilibrado */
+.bg-decoration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  /* Gradientes localizados en las esquinas */
+  background: 
+    radial-gradient(ellipse 80% 60% at 0% 0%, rgba(220, 53, 69, 0.15) 0%, transparent 80%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(255, 107, 129, 0.10) 0%, transparent 70%);
+}
+
+/* Estilos Globales para asegurar que las animaciones funcionen */
+.bg-decoration .dot {
+  position: absolute !important;
+  width: 5px !important;
+  height: 5px !important;
+  border-radius: 50% !important;
+  z-index: 9999 !important;
+  filter: blur(0.2px) !important;
+  animation-name: slide-horizontal-forced !important;
+  animation-timing-function: ease-in-out !important;
+  animation-iteration-count: infinite !important;
+  animation-direction: alternate !important;
+  will-change: transform !important;
+}
+
+/* Puntos inferiores (Animación más pequeña) */
+.bg-decoration .dot.br {
+  width: 4px !important; /* Aún más pequeños */
+  height: 4px !important;
+  animation-name: slide-horizontal-br !important;
+}
+
+.dot.dc { background: #dc3545 !important; box-shadow: 0 0 10px 3px rgba(220,53,69,0.7) !important; }
+.dot.rs { background: #ff6b81 !important; box-shadow: 0 0 10px 3px rgba(255,107,129,0.6) !important; }
+.dot.pk { background: #ff9eb5 !important; box-shadow: 0 0 10px 3px rgba(255,158,181,0.6) !important; }
+.dot.cr { background: #c0392b !important; box-shadow: 0 0 10px 3px rgba(192,57,43,0.7) !important; }
+
+/* Animación de Navegación Elíptica Superior Izquierda (Original) */
+@keyframes slide-horizontal-forced {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0.7; }
+  25%  { transform: translate3d(150px, 30px, 0); }
+  50%  { transform: translate3d(300px, 0, 0); opacity: 1; }
+  75%  { transform: translate3d(150px, -30px, 0); }
+  100% { transform: translate3d(0, 0, 0); opacity: 0.7; }
+}
+
+/* Animación Inferior Derecha (Desplazamiento Reducido) */
+@keyframes slide-horizontal-br {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0.6; }
+  25%  { transform: translate3d(-60px, -15px, 0); }
+  50%  { transform: translate3d(-120px, 0, 0); opacity: 0.9; }
+  75%  { transform: translate3d(-60px, 15px, 0); }
+  100% { transform: translate3d(0, 0, 0); opacity: 0.6; }
+}
+
+
+.home-page {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  background: transparent;
+  padding: 60px 24px 0 24px;
+  overflow: hidden;
+}
+
+.hero-section {
+  position: relative;
+  background: transparent;
+  padding: 60px 24px 0 24px;
+  overflow: hidden;
+}
+
+/* Legibilidad Premium */
+.hero-title, .section-title, .category-title {
+  color: #1F1E23 !important;
+}
+
+.hero-subtitle, .section-subtitle, .category-description {
+  color: #666 !important;
+}
+
+.animated-api, .brand-part-1, .brand-part-2 {
+  color: #1F1E23 !important;
+}
+
+.robot-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.widget-pulse-new {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(220, 53, 69, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+  animation: destellos-anim 1.5s ease-out infinite;
+}
+
+@keyframes destellos-anim {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+  50% { opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
+}
+
+.widget-label-new {
+  background: #dc3545;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 800;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(220, 53, 69, 0.2);
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Chat Window - Manteniendo premium */
+.sufia-chat-window {
+  width: 400px;
+  height: 600px;
+  background: white;
+  border-radius: 32px;
+  box-shadow: 0 30px 100px rgba(0,0,0,0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  animation: chat-open-anim 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes chat-open-anim {
+  0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+.chat-header {
+  background: #dc3545;
+  color: white;
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.avatar-small {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255,255,255,0.4);
+}
+
+.header-info h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.header-info p {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.close-chat {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  transition: all 0.3s ease;
+}
+
+.close-chat:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.message {
+  max-width: 85%;
+  padding: 18px 22px;
+  font-size: 15px;
+  line-height: 1.6;
+  position: relative;
+  animation: message-in 0.4s ease forwards;
+}
+
+@keyframes message-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sufi-msg, .sufia-msg {
+  align-self: flex-start;
+  background: white;
+  border-radius: 24px 24px 24px 6px;
+  color: #1F1E23;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid #f0f0f0;
+}
+
+.user-msg {
+  align-self: flex-end;
+  background: #dc3545;
+  color: white;
+  border-radius: 24px 24px 6px 24px;
+  box-shadow: 0 8px 20px rgba(220, 53, 69, 0.2);
+}
+
+.api-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.api-item {
+  background: rgba(0, 0, 0, 0.03);
+  padding: 10px 15px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.api-item.clickable {
+  cursor: pointer;
+}
+
+.api-item.clickable:hover {
+  background: rgba(220, 53, 69, 0.08);
+  transform: translateX(5px);
+  border-color: #dc3545;
+}
+
+.api-item span {
+  font-size: 16px;
+}
+
+.chat-footer {
+  padding: 25px;
+  background: white;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.chat-input {
+  width: 100%;
+  padding: 18px;
+  border: 2px solid #f0f0f0;
+  border-radius: 18px;
+  outline: none;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.chat-input:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.1);
+}
+
+.chat-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.finish-btn {
+  background: white;
+  color: #666;
+  border: 1px solid #ddd;
+  padding: 14px 24px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.finish-btn:hover {
+  background: #f8f8f8;
+  border-color: #ccc;
+  color: #333;
+}
+
+.send-btn {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 14px 30px;
+  border-radius: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-weight: 800;
+  font-size: 15px;
+  gap: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 25px rgba(220, 53, 69, 0.3);
+}
+
+.sufia-msg.thinking {
+  padding: 12px 20px;
+  min-width: 60px;
+}
+
+.typing-loader {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  height: 20px;
+}
+
+.typing-loader span {
+  width: 6px;
+  height: 6px;
+  background: #dc3545;
+  border-radius: 50%;
+  animation: typing 1s infinite ease-in-out;
+}
+
+.typing-loader span:nth-child(2) { animation-delay: 0.2s; }
+.typing-loader span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-5px); opacity: 1; }
+}
+
+.use-cases-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.use-case-card {
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  padding: 10px 8px;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+@media (max-width: 768px) {
+  .sufia-chat-window {
+    width: 95vw;
+    height: 80vh;
+  }
+}
+
+.use-case-card:hover {
+  border-color: #dc3545;
+  background: #fffafa;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(220, 53, 69, 0.1);
+}
+
+.uc-icon {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.uc-name {
+  font-size: 10px;
+  font-weight: 800;
+  color: #1F1E23;
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.explore-more-container {
+  position: absolute;
+  bottom: 145px; /* Más arriba */
+  left: 0;
+  right: 15px; /* Desplazado a la derecha */
+  display: flex;
+  justify-content: flex-end; /* Alineado a la derecha */
+  z-index: 10;
+  pointer-events: none;
+}
+
+.explore-more-bubble {
+  background: white;
+  color: #dc3545;
+  padding: 6px 12px; /* Más pequeño */
+  border-radius: 16px;
+  font-size: 11px; /* Fuente más pequeña */
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+  border: 1.5px solid #dc3545;
+  cursor: pointer;
+  pointer-events: auto;
+  animation: float-bubble 2s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.explore-more-bubble:hover {
+  background: #dc3545;
+  color: white;
+  transform: scale(1.1);
+}
+
+@keyframes float-bubble {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.send-btn:disabled, .chat-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+}
+
+.send-btn:hover {
+  background: #c82333;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(220, 53, 69, 0.4);
+}
+
+/* --- Estilos de Corazón en Llamas (Popular) --- */
+.category-card {
+  position: relative;
+  overflow: visible !important;
+}
+
+.popular-badge {
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.p-heart {
+  font-size: 28px;
+  filter: drop-shadow(0 0 8px rgba(220, 53, 69, 0.6));
+  animation: heart-buzz 0.5s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes heart-buzz {
+  0%, 100% { transform: rotate(0) scale(1); }
+  25% { transform: rotate(3deg) scale(1.05); }
+  75% { transform: rotate(-3deg) scale(1.05); }
+}
+
+.p-flames {
+  position: absolute;
+  top: -10px;
+  width: 100%;
+  height: 40px;
+}
+
+.p-flame {
+  position: absolute;
+  font-size: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: flame-rise 1.5s ease-out infinite;
+  opacity: 0;
+}
+
+.p-flame:nth-child(2) { animation-delay: 0.5s; font-size: 12px; }
+.p-flame:nth-child(3) { animation-delay: 1s; font-size: 18px; }
+
+@keyframes flame-rise {
+  0% { 
+    transform: translateX(-50%) translateY(10px) scale(0.5); 
+    opacity: 0; 
+  }
+  30% { 
+    opacity: 0.8; 
+  }
+  100% { 
+    transform: translateX(-50%) translateY(-35px) scale(1.5); 
+    opacity: 0; 
+  }
+}
+
+/* --- Gesto de Clíck Premium --- */
+.category-card.is-clicking .category-card-inner {
+  animation: click-buzz 0.5s ease-in-out forwards;
+  border: 3px solid #dc3545;
+  background: #fff5f5;
+  box-shadow: 0 0 30px rgba(220, 53, 69, 0.4);
+}
+
+@keyframes click-buzz {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.96); } /* Ligera contracción suave */
+  100% { transform: scale(1.02); } /* Regresa con elegancia */
 }
 </style>
 

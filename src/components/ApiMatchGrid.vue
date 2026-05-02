@@ -1,5 +1,28 @@
 <template>
   <div class="match-container">
+    <!-- Decoración de Fondo (Doble Esquina) -->
+    <div class="bg-decoration">
+      <!-- Grupo Superior Izquierda (Original) -->
+      <span class="dot dc" style="left:2%;top:5%;animation-duration:15s;animation-delay:0s"></span>
+      <span class="dot rs" style="left:5%;top:10%;animation-duration:18s;animation-delay:-2s"></span>
+      <span class="dot pk" style="left:10%;top:15%;animation-duration:22s;animation-delay:-4s"></span>
+      <span class="dot cr" style="left:15%;top:20%;animation-duration:14s;animation-delay:-6s"></span>
+      <span class="dot rs" style="left:3%;top:25%;animation-duration:20s;animation-delay:-8s"></span>
+      <span class="dot pk" style="left:12%;top:30%;animation-duration:17s;animation-delay:-1s"></span>
+      <span class="dot dc" style="left:20%;top:8%;animation-duration:19s;animation-delay:-3s"></span>
+      <span class="dot cr" style="left:8%;top:35%;animation-duration:16s;animation-delay:-5s"></span>
+      <span class="dot rs" style="left:18%;top:4%;animation-duration:21s;animation-delay:-7s"></span>
+      <span class="dot dc" style="left:25%;top:12%;animation-duration:20s;animation-delay:-9s"></span>
+
+      <!-- Grupo Inferior Derecha (Nuevo - Más pequeño) -->
+      <span class="dot br rs" style="right:2%;bottom:5%;animation-duration:14s;animation-delay:0s"></span>
+      <span class="dot br pk" style="right:6%;bottom:8%;animation-duration:16s;animation-delay:-3s"></span>
+      <span class="dot br dc" style="right:10%;bottom:3%;animation-duration:18s;animation-delay:-1s"></span>
+      <span class="dot br cr" style="right:15%;bottom:12%;animation-duration:15s;animation-delay:-5s"></span>
+      <span class="dot br rs" style="right:4%;bottom:20%;animation-duration:19s;animation-delay:-2s"></span>
+      <span class="dot br pk" style="right:12%;bottom:15%;animation-duration:17s;animation-delay:-7s"></span>
+      <span class="dot br dc" style="right:20%;bottom:10%;animation-duration:20s;animation-delay:-4s"></span>
+    </div>
     <!-- Barra de búsqueda principal -->
     <header class="hero">
       <!-- Título con botón de regreso -->
@@ -12,6 +35,7 @@
       </div>
       <div class="search-row">
         <input
+          ref="searchInput"
           v-model="inputSearch"
           type="text"
           class="search-input"
@@ -80,8 +104,19 @@
         v-for="api in displayedApis"
         :key="api.id"
         class="api-card"
-        :class="backgroundClass(api.id)"
+        :class="[backgroundClass(api.id), { 'is-animating': matchingApi && matchingApi.id === api.id }]"
+        :style="{ animationDelay: (api.id % 7) * 0.8 + 's' }"
       >
+        <!-- Badge de Popularidad (Corazón en Llamas) -->
+        <div v-if="api.popular" class="popular-badge">
+          <span class="p-heart">❤️</span>
+          <div class="p-flames">
+            <span class="p-flame">🔥</span>
+            <span class="p-flame">🔥</span>
+            <span class="p-flame">🔥</span>
+          </div>
+        </div>
+
         <div class="api-card-inner">
           <div class="api-header">
             <h3 class="api-title">{{ api.nombreApi || api.nombreEspanol || api.nombreIngles || 'Sin nombre' }}</h3>
@@ -96,7 +131,7 @@
               target="_blank"
               rel="noopener"
               class="match-btn"
-              @click="handleMatchClick(api)"
+              @click="handleMatchClick(api, $event)"
               title="Ver documentación"
             >
               <span class="heart" aria-hidden="true">❤</span>
@@ -130,6 +165,81 @@
       <p>No se encontraron APIs{{ selectedCategory ? ' en la categoría ' + selectedCategory : ' para tu búsqueda' }}.</p>
       <button class="explore-btn" @click="clearSearch">Limpiar búsqueda</button>
     </div>
+
+    <!-- Overlay de Animación de Match -->
+    <div v-if="matchingApi" class="match-overlay">
+      <div class="particles-container">
+        <div 
+          v-for="p in particles" 
+          :key="p.id" 
+          class="particle"
+          :style="{ 
+            left: p.x + '%', 
+            top: p.y + '%', 
+            '--tx': p.tx + 'px', 
+            '--ty': p.ty + 'px',
+            fontSize: p.size + 'px',
+            animationDelay: p.delay + 's'
+          }"
+        >
+          {{ p.emoji }}
+        </div>
+      </div>
+
+      <!-- Tarjeta que "Vuela" desde su posición original -->
+      <div 
+        class="api-card floating-match-card" 
+        :class="[backgroundClass(matchingApi.id), { 'spinning': isSpinning }]"
+        :style="matchCardStyle"
+        v-show="!showMatchModal"
+      >
+        <div class="api-card-inner">
+          <div class="api-header">
+            <h3 class="api-title">{{ matchingApi.nombreApi || matchingApi.nombreEspanol }}</h3>
+            <span class="api-category">{{ matchingApi.categoria }}</span>
+          </div>
+          <p class="api-desc">{{ matchingApi.descripcion }}</p>
+          <div class="match-heart-indicator">❤️</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Capacidades (Match Modal) -->
+    <div v-if="showMatchModal" class="modal-backdrop" @click="closeModal">
+      <div class="match-modal" @click.stop>
+        <!-- Borde Animado SVG -->
+        <svg class="modal-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <rect x="0" y="0" width="100" height="100" rx="4" fill="none" class="border-rect" />
+        </svg>
+
+        <!-- Destello de Luz -->
+        <div class="modal-shine-sweep"></div>
+
+        <div class="modal-header">
+          <div class="match-badge">¡MATCH!</div>
+          <button class="close-modal-btn" @click="closeModal">✕</button>
+        </div>
+        <div class="modal-body">
+          <h2 class="modal-title">Hiciste match con {{ matchingApi.nombreApi }}</h2>
+          <p class="modal-subtitle">Aquí te cuento qué te puedo ofrecer esta api:</p>
+          
+          <div class="capabilities-section">
+            <h3 class="cap-title">🚀 Capacidades</h3>
+            <ul class="capabilities-list">
+              <li v-for="(cap, idx) in parsedCapabilities" :key="idx" class="cap-item">
+                <span class="cap-check">✓</span>
+                {{ cap }}
+              </li>
+            </ul>
+          </div>
+          
+          <div class="modal-actions">
+            <a :href="matchingApi.link" target="_blank" class="doc-link-btn">Ver Documentación Completa</a>
+            <button class="continue-btn" @click="closeModal">Continuar Explorando</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -138,7 +248,8 @@ export default {
   name: 'ApiMatchGrid',
   props: {
     apis: { type: Array, required: true },
-    initialCategory: { type: String, default: null }
+    initialCategory: { type: String, default: null },
+    isInitialSearch: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -153,7 +264,15 @@ export default {
       storageKeySearch: 'apinderSearch',
       showCategories: false,
       selectedCategory: '',
-      loadingSearch: false
+      loadingSearch: false,
+      ignoreNextSearch: false,
+      // Estados para la animación de Match
+      matchingApi: null,
+      isSpinning: false,
+      showMatchModal: false,
+      particles: [],
+      // Datos de posición inicial para el vuelo
+      initialRect: { top: 0, left: 0, width: 0, height: 0 }
     }
   },
   computed: {
@@ -199,7 +318,8 @@ export default {
             a.nombreEspanol || '',
             a.nombreIngles || '',
             a.descripcion || '',
-            a.palabrasClave || ''
+            a.palabrasClave || '',
+            a.xIbmName || ''
           ].join(' ').toLowerCase();
 
           // Buscar por palabras individuales (mejor indexación)
@@ -220,10 +340,28 @@ export default {
     displayedApis() {
       const start = (this.clampedPage - 1) * this.pageSize;
       return this.filteredApis.slice(start, start + this.pageSize);
+    },
+    parsedCapabilities() {
+      if (!this.matchingApi || !this.matchingApi.beneficios) return [];
+      return this.matchingApi.beneficios.split(',').map(b => b.trim());
+    },
+    matchCardStyle() {
+      if (!this.matchingApi || !this.initialRect.width) return {};
+      // Estilo inicial que coincide exactamente con la tarjeta del grid
+      return {
+        '--start-top': `${this.initialRect.top}px`,
+        '--start-left': `${this.initialRect.left}px`,
+        '--start-width': `${this.initialRect.width}px`,
+        '--start-height': `${this.initialRect.height}px`
+      };
     }
   },
   watch: {
     inputSearch(val) {
+      if (this.ignoreNextSearch) {
+        this.ignoreNextSearch = false;
+        return;
+      }
       if (this.debounceId) clearTimeout(this.debounceId);
       this.debounceId = setTimeout(() => {
         this.search = val;
@@ -236,22 +374,43 @@ export default {
       immediate: true,
       handler(newCategory) {
         if (newCategory) {
-          this.selectedCategory = newCategory;
+          if (this.isInitialSearch) {
+            // Caso Chat: Forzar limpieza y luego escritura con disparo de búsqueda
+            this.inputSearch = '';
+            this.search = '';
+            this.selectedCategory = '';
+            
+            this.$nextTick(() => {
+              this.inputSearch = newCategory;
+              // Disparar la búsqueda formalmente
+              this.applySearch();
+              
+              // Foco y evento nativo para asegurar que el DOM identifique la escritura
+              const inputEl = this.$refs.searchInput;
+              if (inputEl) {
+                inputEl.focus();
+                inputEl.dispatchEvent(new Event('input', { bubbles: true }));
+              }
+            });
+          } else {
+            // Caso Carrusel: Filtro de categoría normal
+            this.selectedCategory = newCategory;
+            this.inputSearch = '';
+            this.search = '';
+          }
           this.currentPage = 1;
           this.showCategories = false;
-          // Scroll al grid de tarjetas
-          this.$nextTick(() => {
-            const el = this.$refs.grid;
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          });
         }
       }
     }
   },
   mounted() {
+    this.$nextTick(() => {
+      window.scrollTo(0, 0);
+    });
     this.loadPersisted();
-    // Si hay categoría inicial, aplicarla
-    if (this.initialCategory) {
+    // Solo aplicar filtro de categoría si NO es una búsqueda técnica del chat
+    if (this.initialCategory && !this.isInitialSearch) {
       this.selectedCategory = this.initialCategory;
     }
   },
@@ -281,12 +440,63 @@ export default {
     goToHome() {
       this.$emit('navigate-to-home');
     },
-    handleMatchClick(api) {
-      // Registrar el match antes de redirigir
+    handleMatchClick(api, event) {
+      if (event) event.preventDefault();
+      
+      const cardEl = event.currentTarget.closest('.api-card');
+      const rect = cardEl.getBoundingClientRect();
+      
+      this.initialRect = {
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height
+      };
+
+      this.matchingApi = api;
+      this.isSpinning = false;
+      this.particles = [];
+
+      // Registrar match (opcional/existente)
       if (!this.isMatched(api)) {
         this.matched.add(api.id);
         this.persistMatches();
       }
+
+      // Iniciar secuencia de animación sincronizada con el vuelo (1.2s)
+      setTimeout(() => {
+        this.isSpinning = true;
+        this.generateParticles();
+        
+        // Duración de las 5 vueltas (ahora 2s)
+        setTimeout(() => {
+          this.isSpinning = false;
+          this.showMatchModal = true;
+        }, 2000);
+      }, 1200); // Sincronizado con match-fly-center (1.2s)
+    },
+    generateParticles() {
+      const emojis = ['❤️', '🔥', '💖', '✨'];
+      for (let i = 0; i < 30; i++) {
+        const isLeft = Math.random() > 0.5;
+        this.particles.push({
+          id: i,
+          emoji: emojis[Math.floor(Math.random() * emojis.length)],
+          x: isLeft ? 40 : 60,
+          y: 50, // Volvemos al centro absoluto de la pantalla
+          // Trayectoria diagonal: izquierda-arriba o derecha-arriba
+          tx: isLeft ? (-300 - Math.random() * 300) : (300 + Math.random() * 300),
+          ty: -1000, 
+          size: 60 + Math.random() * 40, // Mucho más grandes
+          delay: Math.random() * 1.8 
+        });
+      }
+    },
+    closeModal() {
+      this.showMatchModal = false;
+      this.matchingApi = null;
+      this.particles = [];
+      this.isSpinning = false;
     },
     toggleCategoryView() {
       this.showCategories = !this.showCategories;
@@ -335,13 +545,20 @@ export default {
       }
     },
     loadPersisted() {
-      try {
-        const rawM = localStorage.getItem(this.storageKeyMatches);
-        if (rawM) { JSON.parse(rawM).forEach(id => this.matched.add(id)); }
-        const rawS = localStorage.getItem(this.storageKeySearch);
-        if (rawS) { this.search = rawS; this.inputSearch = rawS; }
-      } catch(e){
-        // Silenciar error de localStorage
+      const savedMatches = localStorage.getItem(this.storageKeyMatches);
+      if (savedMatches) this.matched = new Set(JSON.parse(savedMatches));
+      
+      // Si venimos desde una navegación externa (como el chat), ignoramos y limpiamos el persistido
+      if (this.initialCategory) {
+        localStorage.removeItem(this.storageKeySearch);
+        this.inputSearch = this.initialCategory;
+        this.search = this.isInitialSearch ? '' : this.initialCategory;
+      } else {
+        const savedSearch = localStorage.getItem(this.storageKeySearch);
+        if (savedSearch) {
+          this.inputSearch = savedSearch;
+          this.search = savedSearch;
+        }
       }
     }
   }
@@ -353,9 +570,79 @@ export default {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  background: #fff;
+  background: transparent;
   min-height: calc(100vh - 120px);
   padding-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+  animation: slide-in-left 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* Background Decoration: Doble Gradiente Sutil y Equilibrado */
+.bg-decoration {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 99; /* Suficientemente alto para estar al frente pero permitir lectura */
+  pointer-events: none;
+  overflow: hidden;
+  background: 
+    radial-gradient(ellipse 80% 60% at 0% 0%, rgba(220, 53, 69, 0.15) 0%, transparent 80%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(255, 107, 129, 0.10) 0%, transparent 70%);
+}
+
+.bg-decoration .dot {
+  position: absolute !important;
+  width: 5px !important;
+  height: 5px !important;
+  border-radius: 50% !important;
+  z-index: 9999 !important;
+  filter: blur(0.2px) !important;
+  animation-name: slide-horizontal-forced !important;
+  animation-timing-function: ease-in-out !important;
+  animation-iteration-count: infinite !important;
+  animation-direction: alternate !important;
+  will-change: transform !important;
+}
+
+.bg-decoration .dot.br {
+  width: 4px !important;
+  height: 4px !important;
+  animation-name: slide-horizontal-br !important;
+}
+
+.dot.dc { background: #dc3545 !important; box-shadow: 0 0 10px 3px rgba(220,53,69,0.7) !important; }
+.dot.rs { background: #ff6b81 !important; box-shadow: 0 0 10px 3px rgba(255,107,129,0.6) !important; }
+.dot.pk { background: #ff9eb5 !important; box-shadow: 0 0 10px 3px rgba(255,158,181,0.6) !important; }
+.dot.cr { background: #c0392b !important; box-shadow: 0 0 10px 3px rgba(192,57,43,0.7) !important; }
+
+@keyframes slide-horizontal-forced {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0.7; }
+  25%  { transform: translate3d(150px, 30px, 0); }
+  50%  { transform: translate3d(300px, 0, 0); opacity: 1; }
+  75%  { transform: translate3d(150px, -30px, 0); }
+  100% { transform: translate3d(0, 0, 0); opacity: 0.7; }
+}
+
+@keyframes slide-horizontal-br {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0.6; }
+  25%  { transform: translate3d(-60px, -15px, 0); }
+  50%  { transform: translate3d(-120px, 0, 0); opacity: 0.9; }
+  75%  { transform: translate3d(-60px, 15px, 0); }
+  100% { transform: translate3d(0, 0, 0); opacity: 0.6; }
+}
+
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-100vw);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 .hero { padding:32px 24px 12px; background:#ffffff; border-radius:var(--radius-lg); color:#1F1E23; box-shadow:var(--shadow-md); border: 1px solid #e0e0e0; }
 
@@ -441,13 +728,116 @@ export default {
   color: #fff;
   transform: scale(1.1);
 }
+.api-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  border: 1.5px solid #dc3545; /* Rojo Sufi Unificado */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+  animation: soft-jump 8s ease-in-out infinite; /* Salto etéreo y ultra-lento */
+  overflow: visible; /* Para que las llamas sobresalgan */
+}
 
-.search-row { display:flex; align-items:center; gap:12px; position:relative; max-width: 50%; }
+@media (max-width: 768px) {
+  .sufia-chat-window {
+    width: 95vw;
+    height: 80vh;
+    bottom: 10px;
+    right: 2.5vw;
+    border-radius: 20px;
+  }
+  .api-card.match-fly-center {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes soft-jump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); } /* Casi imperceptible */
+}
+
+/* Badge Popular: Corazón en Llamas */
+.popular-badge {
+  position: absolute;
+  top: -18px;
+  right: -12px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.p-heart {
+  font-size: 40px; /* Tamaño imponente */
+  filter: drop-shadow(0 0 12px rgba(220, 53, 69, 0.8));
+  animation: heart-buzz 0.6s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes heart-buzz {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.15) rotate(5deg); } /* Pulsación y rotación */
+  75% { transform: scale(1.15) rotate(-5deg); }
+}
+
+.p-flames {
+  position: absolute;
+  top: -10px;
+  width: 100%;
+  height: 40px;
+  pointer-events: none;
+}
+
+.p-flame {
+  position: absolute;
+  font-size: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: flame-rise 1.5s ease-out infinite;
+  opacity: 0;
+}
+
+.p-flame:nth-child(2) { animation-delay: 0.5s; font-size: 14px; }
+.p-flame:nth-child(3) { animation-delay: 1s; font-size: 20px; }
+
+@keyframes flame-rise {
+  0% { 
+    transform: translateX(-50%) translateY(10px) scale(0.5); 
+    opacity: 0; 
+  }
+  30% { 
+    opacity: 0.8; 
+  }
+  100% { 
+    transform: translateX(-50%) translateY(-35px) scale(1.5); 
+    opacity: 0; 
+  }
+}
+
+.search-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  position: relative; 
+  width: 100%; 
+  max-width: 600px; /* Mejor control en desktop, flexible en mobile */
+}
+
+@media (max-width: 768px) {
+  .search-row {
+    max-width: 100%;
+    margin-bottom: 10px;
+  }
+}
 .search-input {
-  flex:1;
-  background:#fff;
-  border:2px solid #e0e0e0;
-  border-radius:12px;
+  flex: 1;
+  background: #fff;
+  border: 2px solid #e0e0e0;
   padding:14px 18px;
   font-size:17px;
   color:#1F1E23;
@@ -681,7 +1071,13 @@ export default {
   to { transform: rotate(360deg); }
 }
 
-.cards-grid { display:grid; gap:32px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); padding:0 8px 8px; }
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 0 10px 10px;
+}
+
 .api-card {
   border-radius:16px;
   padding:24px;
@@ -697,9 +1093,14 @@ export default {
   box-shadow: 0 8px 24px rgba(220, 53, 69, 0.15);
   border-color: var(--sufi-primary);
 }
-.api-card.bg-cyan { border-top: 4px solid #59cbe8; }
-.api-card.bg-pink { border-top: 4px solid #f8d7da; }
-.api-card-inner { display:flex; flex-direction:column; gap:16px; width:100%; }
+.api-card.bg-cyan { border-top: 4px solid #dc3545; }
+.api-card.bg-pink { border-top: 4px solid #FFD60A; }
+.api-card-inner { 
+  display:flex; 
+  flex-direction:column; 
+  width:100%; 
+  height: 100%;
+}
 .api-header {
   background:#fff;
   color:#1F1E23;
@@ -716,19 +1117,28 @@ export default {
 }
 .api-title {
   margin:0;
-  font-size:20px;
+  font-size:18px;
   font-weight:800;
   color:#1F1E23;
   letter-spacing: -.3px;
-  line-height: 1.3;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 }
 .api-subtitle {
-  margin:8px 0 0;
-  font-size:13px;
+  margin:6px 0 0;
+  font-size:12px;
   font-weight:500;
   opacity:.75;
   color:#666;
   font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .api-category {
   display:inline-block;
@@ -746,9 +1156,16 @@ export default {
 .api-desc {
   margin:0;
   font-size:14px;
-  line-height:1.6;
+  line-height:1.5;
   color:#4a4a4a;
   font-weight:400;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+  flex: 1;
 }
 .card-actions { display:flex; flex-direction: column; gap: 12px; align-items: stretch; margin-top: 8px; }
 .match-btn {
@@ -820,15 +1237,51 @@ export default {
 /* Responsive Design */
 /* Tablets y dispositivos medianos */
 @media (max-width: 1024px) {
-  .cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
-  }
   .hero-title { font-size: 28px; }
 }
 
 /* Tablets pequeños y móviles grandes */
 @media (max-width: 768px) {
+  .api-match-grid { padding: 10px; }
+  
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 15px;
+    gap: 15px;
+  }
+
+  .hero-title { font-size: 20px; text-align: center; width: 100%; }
+  
+  .search-row { width: 100%; }
+  
+  .category-name { font-size: 18px; margin-bottom: 12px; }
+
+  .api-card { 
+    padding: 16px; 
+    min-height: auto;
+  }
+  
+  .api-title { font-size: 16px; }
+  
+  .match-modal {
+    width: 95% !important;
+    max-width: 95% !important;
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+
+  .match-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  
   .title-row {
     flex-direction: column;
     align-items: flex-start;
@@ -839,7 +1292,6 @@ export default {
     font-size: 13px;
     padding: 8px 16px;
   }
-  .hero-title { font-size: 24px; }
   .hero-sub { font-size: 15px; }
   .explore-btn {
     font-size: 15px;
@@ -854,15 +1306,6 @@ export default {
     max-width: 100%;
     flex-direction: row;
   }
-  .cards-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .api-card {
-    padding: 20px;
-    max-width: 100%;
-  }
-  .api-title { font-size: 18px; }
   .api-subtitle { font-size: 12px; }
 }
 
@@ -944,7 +1387,338 @@ export default {
   .search-row { gap: 8px; }
   .api-card { padding: 14px; }
   .category-card { padding: 14px; }
+  .popular-badge .p-heart { font-size: 28px; } /* Corazón más pequeño en mobile */
 }
 
+/* Ajuste de escala de animación para móviles */
+@media (max-width: 768px) {
+  @keyframes match-fly-center {
+    0% { transform: scale(1); }
+    100% { 
+      top: calc(50vh - (var(--start-height) * 1.05 / 2));
+      left: calc(50vw - (var(--start-width) * 1.05 / 2));
+      transform: scale(1.05); /* Escala reducida para mobile */
+    }
+  }
+}
+
+/* --- Animaciones de Match Premium --- */
+.api-card.is-animating {
+  animation: original-card-fade-out 1.2s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes original-card-fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; } /* Desaparece y se mantiene así */
+}
+
+.match-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+  z-index: 10000;
+  overflow: hidden;
+}
+
+.floating-match-card {
+  position: absolute;
+  top: var(--start-top);
+  left: var(--start-left);
+  width: var(--start-width);
+  margin: 0;
+  transform: scale(1);
+  animation: match-fly-center 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  box-shadow: 0 0 50px rgba(220, 53, 69, 0.3);
+  z-index: 10001;
+}
+
+.floating-match-card.spinning {
+  animation: match-spin-y 2s linear infinite;
+}
+
+@keyframes match-fly-center {
+  0% { transform: scale(1); }
+  70% { transform: scale(1.05); } 
+  100% { 
+    top: calc(50vh - (var(--start-height) * 1.2 / 2));
+    left: calc(50vw - (var(--start-width) * 1.2 / 2));
+    transform: scale(1.2); 
+  }
+}
+
+@keyframes match-spin-y {
+  0%   { 
+    top: calc(50vh - (var(--start-height) * 1.2 / 2));
+    left: calc(50vw - (var(--start-width) * 1.2 / 2));
+    transform: scale(1.2) rotateY(0deg); 
+    opacity: 1; 
+  }
+  40%  { 
+    top: calc(50vh - (var(--start-height) * 1.2 / 2));
+    left: calc(50vw - (var(--start-width) * 1.2 / 2));
+    transform: scale(1.2) rotateY(720deg); 
+    opacity: 1; 
+  }
+  60%  { 
+    top: calc(50vh - (var(--start-height) * 1.2 / 2));
+    left: calc(50vw - (var(--start-width) * 1.2 / 2));
+    transform: scale(1.2) rotateY(1080deg); 
+    opacity: 0.7; 
+  }
+  80%  { 
+    top: calc(50vh - (var(--start-height) * 1.2 / 2));
+    left: calc(50vw - (var(--start-width) * 1.2 / 2));
+    transform: scale(1.2) rotateY(1440deg); 
+    opacity: 0.4; 
+  }
+  100% { 
+    top: calc(50vh - (var(--start-height) * 1.2 / 2));
+    left: calc(50vw - (var(--start-width) * 1.2 / 2));
+    transform: scale(1.2) rotateY(1800deg); 
+    opacity: 0.1; 
+  }
+}
+
+/* Partículas */
+.particles-container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+  animation: particle-explode 5s ease-out forwards; /* Más lento y suave */
+}
+
+@keyframes particle-explode {
+  0% { 
+    transform: translate(0, 0) scale(0); 
+    opacity: 0; 
+  }
+  15% {
+    opacity: 0.8;
+    transform: translate(0, -20px) scale(1);
+  }
+  100% { 
+    transform: translate(var(--tx), var(--ty)) scale(0.6); 
+    opacity: 0; 
+  }
+}
+
+.match-heart-indicator {
+  font-size: 80px;
+  text-align: center;
+  margin-top: 20px;
+  animation: heartbeat 1s infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Modal Premium */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 11000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.match-modal {
+  position: relative;
+  background: #fff;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  /* Animación de entrada + Zumbido diferido */
+  animation: 
+    modal-slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    modal-buzz 0.4s ease-in-out 2.5s 1; /* Inicia después de la entrada (0.5s) + destello (2s) */
+}
+
+/* Borde SVG Animado */
+.modal-border-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.border-rect {
+  stroke: #dc3545;
+  stroke-width: 0.5; /* Línea delgada */
+  stroke-dasharray: 400;
+  stroke-dashoffset: 400;
+  animation: border-draw 0.5s linear 0.5s forwards;
+}
+
+@keyframes border-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Destello de Luz */
+.modal-shine-sweep {
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg, 
+    transparent 30%, 
+    rgba(255, 255, 255, 0.4) 50%, 
+    transparent 70%
+  );
+  transform: skewX(-25deg);
+  z-index: 11;
+  pointer-events: none;
+  animation: modal-shine 2s ease-in-out 0.5s forwards;
+}
+
+@keyframes modal-shine {
+  to { left: 150%; }
+}
+
+@keyframes modal-buzz {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.01) rotate(0.5deg); }
+  50% { transform: scale(0.99) rotate(-0.5deg); }
+  75% { transform: scale(1.01) rotate(0.5deg); }
+}
+
+@keyframes modal-slide-up {
+  from { transform: translateY(50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  background: var(--sufi-gradient);
+  padding: 30px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.match-badge {
+  background: #fff;
+  color: #dc3545;
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 12px; /* Más pequeño en modal */
+  letter-spacing: 2px;
+}
+
+.close-modal-btn {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 40px;
+}
+
+.modal-title {
+  font-size: 28px;
+  color: #1F1E23;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.modal-subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.capabilities-section {
+  background: #f8f9fa;
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+}
+
+.cap-title {
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #dc3545;
+}
+
+.capabilities-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.cap-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: #333;
+}
+
+.cap-check {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.doc-link-btn {
+  background: var(--sufi-gradient);
+  color: #fff;
+  text-align: center;
+  padding: 16px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.doc-link-btn:hover {
+  transform: translateY(-2px);
+}
+
+.continue-btn {
+  background: #fff;
+  border: 2px solid #ddd;
+  color: #666;
+  padding: 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
 </style>
 

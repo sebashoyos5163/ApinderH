@@ -7,8 +7,14 @@
       </div>
       <div v-else-if="errorMsg" class="status-banner error container">{{ errorMsg }}</div>
       <div v-else>
-        <HomePage v-if="currentView === 'home'" @navigate-to-apis="showApis" />
-        <ApiMatchGrid v-else :apis="apis" :initial-category="selectedCategory" @navigate-to-home="showHome" />
+        <HomePage v-if="currentView === 'home'" :apis="apis" @navigate-to-apis="showApis" />
+        <ApiMatchGrid 
+          v-else 
+          :apis="apis" 
+          :initial-category="selectedCategory" 
+          :is-initial-search="isInitialSearch"
+          @navigate-to-home="showHome" 
+        />
       </div>
     </main>
   </div>
@@ -30,7 +36,8 @@ export default {
       loading: false,
       errorMsg: null,
       currentView: 'home', // 'home' o 'apis'
-      selectedCategory: null
+      selectedCategory: null,
+      isInitialSearch: false
     }
   },
   mounted() { this.loadApis(); },
@@ -57,15 +64,19 @@ export default {
                 nombreIngles: r['Nombre producto'] || '',
                 descripcion: r['Descripción'] || '',
                 palabrasClave: r['Palabras claves'] || '',
-                link: r['Link'] || ''
+                link: r['Link'] || '',
+                xIbmName: r['x-ibm-name'] || '',
+                beneficios: r['beneficios'] || '',
+                popular: (r['popular'] || '').toLowerCase() === 'si'
               }));
             this.loading = false;
           }
         });
       } catch (e) { console.error(e); this.errorMsg = e.message; this.loading = false; }
     },
-    showApis(category = null) {
+    showApis(category = null, isSearch = false) {
       this.selectedCategory = category;
+      this.isInitialSearch = isSearch;
       this.currentView = 'apis';
     },
     showHome() {
