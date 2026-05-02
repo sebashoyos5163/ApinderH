@@ -1,6 +1,6 @@
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'
-    ? '/apinder-vue/' // Reemplaza con el nombre de tu repositorio
+    ? '/ApinderH/'
     : '/',
   outputDir: 'dist',
   assetsDir: 'assets',

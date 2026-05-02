@@ -61,14 +61,17 @@
                     <div id="carousel-track" class="carousel-track" :class="{ 'is-paused': manualControlActive }">
                       <div class="category-card carousel-item consulta" 
                            :class="{ 'is-clicking': animatingCategory === 'Consulta' }"
-                           @click="navigateToCategory('Consulta')">
+                           @click="navigateToCategory('Consulta', 0, $event)">
                         <div class="category-card-inner">
+                          <div v-if="animatingCategory === 'Consulta'" class="click-flames-burst">
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                          </div>
                           <div class="popular-badge">
                             <span class="p-heart">❤️</span>
                             <div class="p-flames">
-                              <span class="p-flame">🔥</span>
-                              <span class="p-flame">🔥</span>
-                              <span class="p-flame">🔥</span>
+                              <span class="p-flame">🔥</span><span class="p-flame">🔥</span><span class="p-flame">🔥</span>
                             </div>
                           </div>
                           <div class="category-icon">🔍</div>
@@ -78,14 +81,17 @@
                       </div>
                       <div class="category-card carousel-item gestion" 
                            :class="{ 'is-clicking': animatingCategory === 'Gestion' }"
-                           @click="navigateToCategory('Gestion')">
+                           @click="navigateToCategory('Gestion', 1, $event)">
                         <div class="category-card-inner">
+                          <div v-if="animatingCategory === 'Gestion'" class="click-flames-burst">
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                          </div>
                           <div class="popular-badge">
                             <span class="p-heart">❤️</span>
                             <div class="p-flames">
-                              <span class="p-flame">🔥</span>
-                              <span class="p-flame">🔥</span>
-                              <span class="p-flame">🔥</span>
+                              <span class="p-flame">🔥</span><span class="p-flame">🔥</span><span class="p-flame">🔥</span>
                             </div>
                           </div>
                           <div class="category-icon">⚙️</div>
@@ -95,8 +101,13 @@
                       </div>
                       <div class="category-card carousel-item simulacion" 
                            :class="{ 'is-clicking': animatingCategory === 'Simulacion' }"
-                           @click="navigateToCategory('Simulacion')">
+                           @click="navigateToCategory('Simulacion', 2, $event)">
                         <div class="category-card-inner">
+                          <div v-if="animatingCategory === 'Simulacion'" class="click-flames-burst">
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                          </div>
                           <div class="category-icon">📊</div>
                           <h3 class="category-title">Simulación</h3>
                           <p class="category-description">APIs para simular créditos y cotizar seguros</p>
@@ -104,14 +115,17 @@
                       </div>
                       <div class="category-card carousel-item desembolso" 
                            :class="{ 'is-clicking': animatingCategory === 'Desembolso' }"
-                           @click="navigateToCategory('Desembolso')">
+                           @click="navigateToCategory('Desembolso', 3, $event)">
                         <div class="category-card-inner">
+                          <div v-if="animatingCategory === 'Desembolso'" class="click-flames-burst">
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                          </div>
                           <div class="popular-badge">
                             <span class="p-heart">❤️</span>
                             <div class="p-flames">
-                              <span class="p-flame">🔥</span>
-                              <span class="p-flame">🔥</span>
-                              <span class="p-flame">🔥</span>
+                              <span class="p-flame">🔥</span><span class="p-flame">🔥</span><span class="p-flame">🔥</span>
                             </div>
                           </div>
                           <div class="category-icon">💰</div>
@@ -121,8 +135,13 @@
                       </div>
                       <div class="category-card carousel-item enrolamiento" 
                            :class="{ 'is-clicking': animatingCategory === 'Enrolamiento' }"
-                           @click="navigateToCategory('Enrolamiento')">
+                           @click="navigateToCategory('Enrolamiento', 4, $event)">
                         <div class="category-card-inner">
+                          <div v-if="animatingCategory === 'Enrolamiento'" class="click-flames-burst">
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                          </div>
                           <div class="category-icon">✅</div>
                           <h3 class="category-title">Enrolamiento</h3>
                           <p class="category-description">APIs para enrolamiento y registro de usuarios</p>
@@ -130,8 +149,13 @@
                       </div>
                       <div class="category-card carousel-item registrar" 
                            :class="{ 'is-clicking': animatingCategory === 'Registrar' }"
-                           @click="navigateToCategory('Registrar')">
+                           @click="navigateToCategory('Registrar', 5, $event)">
                         <div class="category-card-inner">
+                          <div v-if="animatingCategory === 'Registrar'" class="click-flames-burst">
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                            <span class="burst-flame">🔥</span><span class="burst-flame">🔥</span><span class="burst-flame">🔥</span>
+                          </div>
                           <div class="category-icon">📝</div>
                           <h3 class="category-title">Registrar</h3>
                           <p class="category-description">APIs para registrar y gestionar obligaciones</p>
@@ -387,26 +411,32 @@ export default {
           const duration = 15000;
           const targetTime = parseFloat(savedPos);
           
-          // Calculamos cuánto debemos desplazar todas las tarjetas respecto a la primera
-          const firstCardAnims = cards[0].getAnimations();
+          // Buscamos la animación maestra en la primera tarjeta para calcular el delta
+          const firstCardAnims = cards[0].getAnimations({ subtree: true });
           const mainAnim = firstCardAnims.find(a => a.animationName && a.animationName.includes('slide-cover-flow'));
           
           if (mainAnim) {
             const currentTime = mainAnim.currentTime || 0;
             const delta = targetTime - currentTime;
             
-            // Aplicamos el mismo delta a todas para mantener el espaciado intacto
+            // Sincronizamos ABSOLUTAMENTE TODAS las animaciones del carrusel (incluyendo hijos y pseudo-elementos)
+            const allCarouselAnims = this.$el.querySelectorAll('.carousel-track *');
+            allCarouselAnims.forEach(el => {
+              el.getAnimations({ subtree: true }).forEach(anim => {
+                let newTime = (anim.currentTime || 0) + delta;
+                anim.currentTime = ((newTime % duration) + duration) % duration;
+              });
+            });
+            
+            // También las animaciones directas de las tarjetas
             cards.forEach(card => {
-              const anims = card.getAnimations();
-              anims.forEach(anim => {
-                if (anim.animationName && (anim.animationName.includes('slide-cover-flow') || anim.animationName.includes('active-state'))) {
-                  let newTime = (anim.currentTime || 0) + delta;
-                  anim.currentTime = ((newTime % duration) + duration) % duration;
-                }
+              card.getAnimations().forEach(anim => {
+                let newTime = (anim.currentTime || 0) + delta;
+                anim.currentTime = ((newTime % duration) + duration) % duration;
               });
             });
           }
-        }, 50);
+        }, 100); // Un poco más de tiempo para asegurar carga total
       });
     }
   },
@@ -414,23 +444,19 @@ export default {
     navigateToApis() {
       this.$emit('navigate-to-apis');
     },
-    navigateToCategory(category) {
+    navigateToCategory(category, index) {
       if (this.animatingCategory) return;
+      
       this.animatingCategory = category;
       
-      // Guardar posición actual del carrusel para persistencia
-      const firstCard = this.$el.querySelector('.carousel-item');
-      if (firstCard) {
-        const anims = firstCard.getAnimations();
-        if (anims.length > 0) {
-          localStorage.setItem('carouselPos', anims[0].currentTime);
-        }
-      }
+      // Persistencia Inteligente: Guardar el tiempo que centra ESTA tarjeta
+      const centerTime = index * 2500;
+      localStorage.setItem('carouselPos', centerTime);
 
       setTimeout(() => {
         this.$emit('navigate-to-apis', category);
         this.animatingCategory = null;
-      }, 500);
+      }, 1700);
     },
     async sendMessage() {
       if (!this.userInput.trim() || this.isChatFinished) return;
@@ -1494,41 +1520,41 @@ export default {
 
 @keyframes slide-cover-flow {
   /* Arrives at Center */
-  0% { left: 50%; transform: scale(1.05); opacity: 1; z-index: 2; visibility: visible; }
+  0% { left: 50%; transform: scale(1.05); opacity: 1; z-index: 2; visibility: visible; pointer-events: auto; }
   
   /* Shake and enlarge in Center */
-  2% { left: 50%; transform: scale(1.15) rotate(0deg); opacity: 1; z-index: 2; visibility: visible; }
-  3% { left: 50%; transform: scale(1.15) rotate(-3deg); opacity: 1; z-index: 2; visibility: visible; }
-  4% { left: 50%; transform: scale(1.15) rotate(3deg); opacity: 1; z-index: 2; visibility: visible; }
-  5% { left: 50%; transform: scale(1.15) rotate(-3deg); opacity: 1; z-index: 2; visibility: visible; }
-  6% { left: 50%; transform: scale(1.15) rotate(0deg); opacity: 1; z-index: 2; visibility: visible; }
+  2% { left: 50%; transform: scale(1.15) rotate(0deg); opacity: 1; z-index: 2; visibility: visible; pointer-events: auto; }
+  3% { left: 50%; transform: scale(1.15) rotate(-3deg); opacity: 1; z-index: 2; visibility: visible; pointer-events: auto; }
+  4% { left: 50%; transform: scale(1.15) rotate(3deg); opacity: 1; z-index: 2; visibility: visible; pointer-events: auto; }
+  5% { left: 50%; transform: scale(1.15) rotate(-3deg); opacity: 1; z-index: 2; visibility: visible; pointer-events: auto; }
+  6% { left: 50%; transform: scale(1.15) rotate(0deg); opacity: 1; z-index: 2; visibility: visible; pointer-events: auto; }
   
   /* Stay in Center */
-  14% { left: 50%; transform: scale(1.15) rotate(0deg); opacity: 1; z-index: 2; visibility: visible; }
+  14% { left: 50%; transform: scale(1.15) rotate(0deg); opacity: 1; z-index: 2; visibility: visible; pointer-events: auto; }
   
   /* Transition to Left */
-  16.67% { left: 15%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; }
+  16.67% { left: 15%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; pointer-events: none; }
   
   /* Stay in Left */
-  31% { left: 15%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; }
+  31% { left: 15%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; pointer-events: none; }
   
   /* Transition to Far Left (Hidden) */
-  33.33% { left: -30%; transform: scale(0.5); opacity: 0; z-index: 0; visibility: hidden; }
+  33.33% { left: -30%; transform: scale(0.5); opacity: 0; z-index: 0; visibility: hidden; pointer-events: none; }
   
   /* Jump to Far Right (Hidden) */
-  34% { left: 130%; transform: scale(0.5); opacity: 0; z-index: 0; visibility: hidden; }
+  34% { left: 130%; transform: scale(0.5); opacity: 0; z-index: 0; visibility: hidden; pointer-events: none; }
   
   /* Stay Hidden Far Right */
-  81% { left: 130%; transform: scale(0.5); opacity: 0; z-index: 0; visibility: hidden; }
+  81% { left: 130%; transform: scale(0.5); opacity: 0; z-index: 0; visibility: hidden; pointer-events: none; }
   
   /* Transition to Right */
-  83.33% { left: 85%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; }
+  83.33% { left: 85%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; pointer-events: none; }
   
   /* Stay in Right */
-  98% { left: 85%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; }
+  98% { left: 85%; transform: scale(0.85); opacity: 0.4; z-index: 1; visibility: visible; pointer-events: none; }
   
   /* Transition to Center */
-  100% { left: 50%; transform: scale(1.05); opacity: 1; z-index: 2; visibility: visible; }
+  100% { left: 50%; transform: scale(1.05); opacity: 1; z-index: 2; visibility: visible; pointer-events: auto; }
 }
 
 @keyframes active-state {
@@ -1579,21 +1605,25 @@ export default {
 }
 
 .category-card-inner {
+  position: relative;
+  width: 100%;
   height: 100%;
+  padding: 40px 32px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  padding: 30px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  align-items: center; /* Centrado absoluto */
+  justify-content: center; /* Centrado absoluto */
+  text-align: center;
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
   transition: transform 1s cubic-bezier(0.2, 1, 0.2, 1), box-shadow 1s ease, background 1s ease;
-  position: relative;
+  z-index: 10;
 }
 
 .category-card:hover .category-card-inner {
-  transform: scale(1.15); /* Ahora el escalado sí será visible y fluido */
+  transform: scale(1.15);
   box-shadow: 0 25px 60px rgba(220, 53, 69, 0.2);
   background: #fffafa;
   z-index: 100;
@@ -2457,6 +2487,15 @@ export default {
 }
 
 /* Background Animation Styles - Digital City (Solo Edificios) */
+.sufia-chat-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 10000;
+  /* Espacio de seguridad para no tapar el carrusel */
+  pointer-events: auto;
+}
+
 .bg-animation-container {
   position: fixed;
   top: 0;
@@ -2902,6 +2941,9 @@ export default {
   margin-top: 20px;
 }
 
+
+
+
 .use-case-card {
   background: #fdfdfd;
   border: 1px solid #eee;
@@ -2918,6 +2960,11 @@ export default {
 }
 
 @media (max-width: 768px) {
+  .sufia-chat-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
   .sufia-chat-window {
     width: 95vw;
     height: 80vh;
@@ -3058,17 +3105,67 @@ export default {
 }
 
 /* --- Gesto de Clíck Premium --- */
+/* --- Efecto Explosión de Fuego --- */
+.click-flames-burst {
+  position: absolute;
+  bottom: 0; /* Inicia desde abajo */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 20px;
+  pointer-events: none;
+  z-index: 20;
+  display: flex;
+  justify-content: center;
+}
+
+.burst-flame {
+  position: absolute;
+  font-size: 38px;
+  animation: fire-burst 1.7s cubic-bezier(0.12, 0, 0.39, 0) forwards;
+  opacity: 0;
+  filter: drop-shadow(0 0 20px rgba(255, 69, 0, 0.6));
+}
+
+.burst-flame:nth-child(1) { --ix: -120px; --tx: -200px; --ty: -450px; animation-delay: 0s; }
+.burst-flame:nth-child(2) { --ix: -80px; --tx: -140px; --ty: -500px; animation-delay: 0.15s; }
+.burst-flame:nth-child(3) { --ix: -40px; --tx: -80px; --ty: -550px; animation-delay: 0.05s; }
+.burst-flame:nth-child(4) { --ix: 0px; --tx: -15px; --ty: -600px; animation-delay: 0.25s; } /* Central 1 */
+.burst-flame:nth-child(5) { --ix: 0px; --tx: 15px; --ty: -620px; animation-delay: 0.35s; }  /* Central 2 */
+.burst-flame:nth-child(6) { --ix: 40px; --tx: 80px; --ty: -550px; animation-delay: 0.08s; }
+.burst-flame:nth-child(7) { --ix: 80px; --tx: 140px; --ty: -500px; animation-delay: 0.2s; }
+.burst-flame:nth-child(8) { --ix: 120px; --tx: 200px; --ty: -450px; animation-delay: 0.12s; }
+.burst-flame:nth-child(9) { --ix: 0px; --tx: 0px; --ty: -580px; animation-delay: 0.45s; }   /* Central 3 */
+
+@keyframes fire-burst {
+  0% {
+    transform: translate(var(--ix), 0) scale(0.5);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+    transform: translate(var(--ix), -30px) scale(1.2);
+  }
+  60% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(3.2);
+    opacity: 0;
+  }
+}
+
 .category-card.is-clicking .category-card-inner {
   animation: click-buzz 0.5s ease-in-out forwards;
   border: 3px solid #dc3545;
   background: #fff5f5;
-  box-shadow: 0 0 30px rgba(220, 53, 69, 0.4);
+  box-shadow: 0 0 40px rgba(220, 53, 69, 0.6);
 }
 
 @keyframes click-buzz {
   0% { transform: scale(1); }
-  50% { transform: scale(0.96); } /* Ligera contracción suave */
-  100% { transform: scale(1.02); } /* Regresa con elegancia */
+  50% { transform: scale(0.94); }
+  100% { transform: scale(1.04); }
 }
 </style>
 
