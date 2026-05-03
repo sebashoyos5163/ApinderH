@@ -205,8 +205,8 @@
     </div>
 
     <!-- Modal de Capacidades (Match Modal) -->
-    <div v-if="showMatchModal" class="modal-backdrop" @click="closeModal">
-      <div class="match-modal" @click.stop>
+    <div v-if="showMatchModal" class="modal-backdrop" :class="{ 'modal-closing': isClosing }" @click="closeModal">
+      <div class="match-modal" :class="{ 'modal-closing': isClosing }" @click.stop>
         <!-- Borde Animado SVG -->
         <svg class="modal-border-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
           <rect x="0" y="0" width="100" height="100" rx="4" fill="none" class="border-rect" />
@@ -225,6 +225,11 @@
           
           <div class="capabilities-section">
             <h3 class="cap-title">🚀 Capacidades</h3>
+            <p class="cap-detail-invite">
+              si deseas conocer en detalle esta capacidad ingresa a 
+              <br>
+              <a :href="matchingApi.link" target="_blank" class="cap-link-highlight">{{ matchingApi.link }}</a>
+            </p>
             <ul class="capabilities-list">
               <li v-for="(cap, idx) in parsedCapabilities" :key="idx" class="cap-item">
                 <span class="cap-check">✓</span>
@@ -271,6 +276,7 @@ export default {
       isSpinning: false,
       showMatchModal: false,
       particles: [],
+      isClosing: false,
       // Datos de posición inicial para el vuelo
       initialRect: { top: 0, left: 0, width: 0, height: 0 }
     }
@@ -493,10 +499,14 @@ export default {
       }
     },
     closeModal() {
-      this.showMatchModal = false;
-      this.matchingApi = null;
-      this.particles = [];
-      this.isSpinning = false;
+      this.isClosing = true;
+      setTimeout(() => {
+        this.showMatchModal = false;
+        this.isClosing = false;
+        this.matchingApi = null;
+        this.particles = [];
+        this.isSpinning = false;
+      }, 500);
     },
     toggleCategoryView() {
       this.showCategories = !this.showCategories;
@@ -1712,13 +1722,76 @@ export default {
 }
 
 .continue-btn {
-  background: #fff;
-  border: 2px solid #ddd;
-  color: #666;
+  background: #dc3545; /* Fondo rojizo */
+  border: none;
+  color: #fff; /* Texto blanco */
   padding: 16px;
   border-radius: 12px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
+.continue-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Animación de destello Shimmer */
+.continue-btn::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 50%;
+  height: 300%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  animation: shimmer-sweep 1s infinite;
+}
+
+@keyframes shimmer-sweep {
+  0% { top: -100%; left: -100%; }
+  100% { top: 100%; left: 100%; }
+}
+
+.cap-detail-invite {
+  margin: 15px 0;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.cap-link-highlight {
+  color: #dc3545;
+  text-decoration: none;
+  font-weight: 600;
+  word-break: break-all;
+  transition: opacity 0.3s;
+}
+
+.cap-link-highlight:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+/* Efectos de Cierre Progresivo */
+.modal-backdrop.modal-closing {
+  opacity: 0 !important;
+  transition: opacity 0.5s ease;
+}
+
+.match-modal.modal-closing {
+  transform: scale(0.9) translateY(20px) !important;
+  opacity: 0 !important;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
 </style>
 
