@@ -518,7 +518,7 @@ export default {
 
       try {
         // 3. Petición DIRECTA a la IP y Puerto (Sin puentes ni proxies)
-        const apiUrl = `http://23.20.11.88:8091/api/rag/mcp?message=${encodeURIComponent(userMessageText)}`;
+        const apiUrl = `https://23.20.11.88:8091/api/rag/mcp?message=${encodeURIComponent(userMessageText)}`;
         
         const response = await fetch(apiUrl, {
           method: 'GET'
