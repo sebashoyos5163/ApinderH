@@ -399,6 +399,9 @@ export default {
     },
     isChatOpen(newVal) {
       localStorage.setItem('sufiaChatOpen', newVal);
+    },
+    showExploreMore(newVal) {
+      localStorage.setItem('sufiaShowExploreMore', newVal);
     }
   },
   mounted() {
@@ -459,12 +462,17 @@ export default {
         this.isChatOpen = true;
         this.$nextTick(this.scrollToBottom);
       }
+      const savedExploreMore = localStorage.getItem('sufiaShowExploreMore');
+      if (savedExploreMore === 'true') {
+        this.showExploreMore = true;
+      }
       // Limpiar bandera para que el próximo refresh sea limpio
       localStorage.removeItem('isReturningFromMatch');
     } else {
       // Si no estamos volviendo, limpiamos la memoria del chat para iniciar frescos
       localStorage.removeItem('sufiaMessages');
       localStorage.removeItem('sufiaChatOpen');
+      localStorage.removeItem('sufiaShowExploreMore');
     }
   },
   methods: {
