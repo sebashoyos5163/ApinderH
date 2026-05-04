@@ -334,28 +334,16 @@
           </div>
         </div>
 
-        <div v-if="showExploreMore" class="explore-more-container">
-          <div class="explore-more-bubble" @click="exploreMore">
-            ¿ Explorar más casos ?
-          </div>
-        </div>
 
-        <div class="chat-footer">
-          <input 
-            type="text" 
-            v-model="userInput" 
-            @keyup.enter="sendMessage" 
-            :disabled="isChatFinished"
-            :placeholder="isChatFinished ? 'Chat finalizado...' : 'Escribe tu mensaje...'" 
-            class="chat-input"
-          >
-          <div class="chat-actions">
-            <button v-if="!isChatFinished" class="finish-btn" @click="finishChat">
-              Finalizar
-            </button>
-            <button class="send-btn" @click="sendMessage" :disabled="isChatFinished">
-              <svg viewBox="0 0 24 24" width="20" height="20" style="margin-right: 5px;"><path fill="currentColor" d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-              Enviar
+        <div class="chat-footer selection-only">
+          <!-- Burbuja Flotante de Casos (Condicional: Solo tras mostrar APIs) -->
+          <div v-if="showExploreMore" class="explore-other-cases-bubble" @click="exploreMore">
+            ¿ Explorar otros casos ?
+          </div>
+
+          <div class="chat-actions centered">
+            <button v-if="!isChatFinished" class="finish-btn large" @click="finishChat">
+              Finalizar Chat
             </button>
           </div>
         </div>
@@ -400,6 +388,19 @@ export default {
       showExploreMore: false
     }
   },
+  watch: {
+    messages: {
+      deep: true,
+      handler(newVal) {
+        // Filtrar mensajes de "pensando" antes de guardar
+        const toSave = newVal.filter(m => !m.isThinking);
+        localStorage.setItem('sufiaMessages', JSON.stringify(toSave));
+      }
+    },
+    isChatOpen(newVal) {
+      localStorage.setItem('sufiaChatOpen', newVal);
+    }
+  },
   mounted() {
     const savedPos = localStorage.getItem('carouselPos');
     if (savedPos) {
@@ -436,8 +437,34 @@ export default {
               });
             });
           }
-        }, 100); // Un poco más de tiempo para asegurar carga total
+        }, 100); 
       });
+    }
+
+    // Restaurar estado del Chat de SUFIA SOLO si volvemos de un Match
+    const isReturning = localStorage.getItem('isReturningFromMatch');
+    
+    if (isReturning === 'true') {
+      const savedMessages = localStorage.getItem('sufiaMessages');
+      if (savedMessages) {
+        try {
+          this.messages = JSON.parse(savedMessages);
+          this.$nextTick(this.scrollToBottom);
+        } catch (e) {
+          console.error("Error cargando mensajes de SUFIA:", e);
+        }
+      }
+      const savedChatOpen = localStorage.getItem('sufiaChatOpen');
+      if (savedChatOpen === 'true') {
+        this.isChatOpen = true;
+        this.$nextTick(this.scrollToBottom);
+      }
+      // Limpiar bandera para que el próximo refresh sea limpio
+      localStorage.removeItem('isReturningFromMatch');
+    } else {
+      // Si no estamos volviendo, limpiamos la memoria del chat para iniciar frescos
+      localStorage.removeItem('sufiaMessages');
+      localStorage.removeItem('sufiaChatOpen');
     }
   },
   methods: {
@@ -460,6 +487,9 @@ export default {
     },
     async sendMessage() {
       if (!this.userInput.trim() || this.isChatFinished) return;
+      
+      this.showExploreMore = false; // Ocultar burbuja al iniciar nueva consulta
+
       
       const userMessageText = this.userInput;
       const userMessageId = Date.now();
@@ -488,7 +518,7 @@ export default {
 
       try {
         // 3. Petición DIRECTA a la IP y Puerto (Sin puentes ni proxies)
-        const apiUrl = `http://54.197.221.28:8091/api/rag/mcp?message=${encodeURIComponent(userMessageText)}`;
+        const apiUrl = `http://23.20.11.88:8091/api/rag/mcp?message=${encodeURIComponent(userMessageText)}`;
         
         const response = await fetch(apiUrl, {
           method: 'GET'
@@ -613,6 +643,9 @@ export default {
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       });
       this.$nextTick(this.scrollToBottom);
+      
+      // Activar bandera de persistencia para el chat al volver
+      localStorage.setItem('isReturningFromMatch', 'true');
 
       setTimeout(() => {
         this.toggleChat();
@@ -631,10 +664,9 @@ export default {
     },
     toggleChat() {
       this.isChatOpen = !this.isChatOpen;
-      // Si se cierra el chat, resetear el estado de finalizado para la próxima vez
+      // Ya no reseteamos los mensajes al cerrar para mantener la persistencia
       if (!this.isChatOpen) {
         this.isChatFinished = false;
-        this.messages = [];
       }
     },
     selectUseCase(uc) {
@@ -2842,14 +2874,70 @@ export default {
   font-size: 16px;
 }
 
-.chat-footer {
-  padding: 25px;
-  background: white;
+.explore-other-cases-bubble {
+  position: absolute;
+  top: -35px;
+  right: 20px;
+  background: rgba(220, 53, 69, 0.9);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+  z-index: 100;
+  animation: float-bubble 3s ease-in-out infinite;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.explore-other-cases-bubble:hover {
+  background: #dc3545;
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 6px 15px rgba(220, 53, 69, 0.4);
+}
+
+@keyframes float-bubble {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.chat-footer.selection-only {
+  padding: 25px 20px;
+  background: #f8f9fa;
   border-top: 1px solid #eee;
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
+
+.chat-actions.centered {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.finish-btn.large {
+  padding: 12px 40px;
+  font-size: 14px;
+  border-radius: 50px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.finish-btn.large:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
 
 .chat-input {
   width: 100%;
