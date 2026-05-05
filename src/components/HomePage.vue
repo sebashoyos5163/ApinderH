@@ -371,19 +371,19 @@ export default {
       messages: [],
       userInput: '',
       useCases: [
-        { id: 1, name: 'Obligaciones', icon: '📄' },
+        { id: 1, name: 'Mi Bancolombia', icon: '📄' },
         { id: 2, name: 'Audio Sufi', icon: '🎧' },
         { id: 3, name: 'Efecty', icon: '💰' },
-        { id: 4, name: 'Audio Sufi y Obligaciones', icon: '🎙️' },
-        { id: 5, name: 'Información de Cliente', icon: '👤' },
-        { id: 6, name: 'Simulación', icon: '📊' },
-        { id: 7, name: 'Tu 360', icon: '🌐' },
+        { id: 4, name: 'Línea Telefónica Bancolombia', icon: '🎙️' },
+        { id: 5, name: 'WhatsApp', icon: '👤' },
+        { id: 6, name: 'Simulación externa', icon: '📊' },
+        { id: 7, name: 'Simulación interna', icon: '🌐' },
         { id: 8, name: 'Consumo', icon: '🛍️' },
-        { id: 9, name: 'Autenticación Liviana', icon: '🔐' },
+        { id: 9, name: 'Sucursal Virtual Sufi', icon: '🔐' },
         { id: 10, name: 'Botón Recaudo', icon: '🖱️' },
-        { id: 11, name: 'Auto Gestión', icon: '⚙️' },
-        { id: 12, name: 'Comercios Aliados', icon: '🤝' },
-        { id: 13, name: 'Gestionar mi Crédito', icon: '💳' }
+        { id: 11, name: 'Desembolso Automático', icon: '⚙️' },
+        { id: 12, name: 'Modificar Canal', icon: '🤝' },
+        { id: 13, name: 'Cambio día de pago', icon: '💳' }
       ],
       showExploreMore: false
     }
@@ -526,7 +526,7 @@ export default {
 
       try {
         // 3. Petición DIRECTA a la IP y Puerto (Sin puentes ni proxies)
-        const apiUrl = `https://23.20.11.88:8091/api/rag/mcp?message=${encodeURIComponent(userMessageText)}`;
+        const apiUrl = `https://54.242.212.193:8091/api/rag/mcp?message=${encodeURIComponent(userMessageText)}`;
         
         const response = await fetch(apiUrl, {
           method: 'GET'
